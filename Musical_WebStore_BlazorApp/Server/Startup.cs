@@ -15,15 +15,17 @@ namespace Musical_WebStore_BlazorApp.Server
     public class Startup
     {
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            Environment = env;
         }
 
-        public void ConfigureServices(IServiceCollection services, IWebHostEnvironment env)
+        public void ConfigureServices(IServiceCollection services)
         {
-            string connstr = GetConnectionString(env);
+            string connstr = GetConnectionString(Environment);
 
             services.AddDbContext<MusicalShopIdentityDbContext>(
                 options => options.UseSqlServer(connstr));
