@@ -1,0 +1,25 @@
+﻿@page "/list"
+@using Musical_WebStore_BlazorApp.Shared
+@inject HttpClient Http
+<h3>Instruments</h3>
+
+@if (instruments == null)
+{
+    <p><em>Loading instruments...</em></p>
+}
+else
+{
+    @foreach (var instrument in instruments)
+    {
+        <h1>@instrument.Id , @instrument.Title , @instrument.Price , @instrument.Quantity , @instrument.Description</h1>
+    }
+}
+
+@code {
+    Instrument[] instruments;
+
+    protected override async Task OnInitializedAsync()
+    {
+        instruments = await Http.GetJsonAsync<Instrument[]>("api/Instruments");
+    }
+}
