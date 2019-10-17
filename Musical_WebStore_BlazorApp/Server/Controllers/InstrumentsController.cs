@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Musical_WebStore_BlazorApp.Shared;
+using Musical_WebStore_BlazorApp.Client;
 
 
 namespace Musical_WebStore_BlazorApp.Server.Controllers
@@ -17,7 +18,7 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
         {
             for(int i = 1; i <= 25; i++)
             {
-                yield return new Instrument(i, $"test{i}", i, i, $"test desc{i}");
+                yield return new Instrument(i, $"test{i}", i, i, $"test desc{i}", "test.jpg");
             }
         }
         [HttpGet]

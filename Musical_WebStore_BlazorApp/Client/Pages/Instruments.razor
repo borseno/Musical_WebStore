@@ -11,7 +11,15 @@ else
 {
     @foreach (var instrument in instruments)
     {
-        <h1>@instrument.Id , @instrument.Title , @instrument.Price , @instrument.Quantity , @instrument.Description</h1>
+        //<h1 class="testing">@instrument.Id , @instrument.Title , @instrument.Price , @instrument.Quantity , @instrument.Description, <img src="@instrument.Image" /></h1>
+        <div class="item-instr">
+            <img src="@instrument.Image"/>
+            <div class="item-list">
+                <h3>ID: @instrument.Id ; @instrument.Title</h3>
+                <span class="price-instr">Price: @instrument.Price ; Quantity: @instrument.Quantity</span>
+                <h6>Description: @instrument.Description</h6>
+            </div>
+        </div>
     }
 }
 
