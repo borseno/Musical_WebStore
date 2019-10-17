@@ -15,9 +15,10 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
     {
         private IEnumerable<Instrument> GetInstruments()
         {
-            yield return new Instrument(1, "test0", 3, 3, "test desc");
-            yield return new Instrument(2, "test1", 5, 5, "test desc");
-            yield return new Instrument(3, "test2", 7, 7, "test desc");
+            for(int i = 1; i <= 25; i++)
+            {
+                yield return new Instrument(i, $"test{i}", i, i, $"test desc{i}");
+            }
         }
         [HttpGet]
         public IEnumerable<Instrument> Get()
