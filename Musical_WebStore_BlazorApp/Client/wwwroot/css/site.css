@@ -153,7 +153,10 @@ app {
     border-bottom: 1px solid grey;
 }
 .item-list {
-    padding: 15px 0;
+    padding: 10px 0;
+}
+.btn-cart{
+    padding: 5px 0;
 }
 .item-list h3{
     font-size:30px;
@@ -165,5 +168,4 @@ app {
     font-size: 16px;
     color: black;
     display: block;
-    margin-bottom: 12px;
 }
