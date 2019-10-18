@@ -1,7 +1,7 @@
 ﻿@page "/list"
 @using Musical_WebStore_BlazorApp.Shared
 @inject HttpClient Http
-<h3>Instruments</h3>
+<h3 class="inst-title">Instruments</h3>
 
 @if (instruments == null)
 {
@@ -9,17 +9,19 @@
 }
 else
 {
+<div class="all-instr">
     @foreach (var instrument in instruments)
     {
         <div class="item-instr">
-            <img src="@instrument.Image"/>
+            <img src="@instrument.Image" />
             <div class="item-list">
-                <h3>ID: @instrument.Id ; @instrument.Title</h3>
+                <h3>@instrument.Title</h3>
                 <span class="price-instr">Price: @instrument.Price ; Quantity: @instrument.Quantity</span>
                 <h6>Description: @instrument.Description</h6>
             </div>
         </div>
     }
+</div>
 }
 
 @code {

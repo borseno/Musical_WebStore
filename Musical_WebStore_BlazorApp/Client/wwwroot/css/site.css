@@ -133,27 +133,33 @@ app {
         display: block;
     }
 }
+.all-instr {
+    text-align: center;
+}
 .item-instr {
     width: 300px;
     text-align: center;
-    float: left;
+    display: inline-block;
+    position: relative;
     margin: 10px;
     background: white;
     font-family: "Open Sans";
-    border: 1px solid black;
+    border: 2px solid black;
 }
 .item-instr img {
+    vertical-align: central;
     display: block;
-    width: 100%;
+    width:100%;
+    border-bottom: 1px solid grey;
 }
 .item-list {
     padding: 15px 0;
 }
-.item-list h3 {
-    font-size: 18px;
-    font-weight: 400;
-    color: black;
-    margin: 0 0 10px 0;
+.item-list h3{
+    font-size:30px;
+}
+.inst-title{
+    text-align:center;
 }
 .price-instr {
     font-size: 16px;
