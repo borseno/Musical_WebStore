@@ -13,13 +13,11 @@ else
     @foreach (var instrument in instruments)
     {
         <div class="item-instr">
-            <img src="@instrument.Image" />
+            <button class="purchase">Add to Cart</button>
+            <img class="item-img" src="@instrument.Image" />
             <div class="item-list">
                 <h3>@instrument.Title</h3>
                 <span class="price-instr">Price: @instrument.Price</span>
-            </div>
-            <div class="btn-cart">
-                <button>Add to Cart</button>
             </div>
         </div>
     }
