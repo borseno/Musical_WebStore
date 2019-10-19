@@ -58,6 +58,8 @@ namespace Musical_WebStore_BlazorApp.Server
                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"]))
                         };
                     });
+
+
         }
 
         private string GetConnectionString(IWebHostEnvironment env)
