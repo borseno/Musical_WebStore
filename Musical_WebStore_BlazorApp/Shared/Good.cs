@@ -20,11 +20,6 @@ namespace Musical_WebStore_BlazorApp.Shared
 
         public Good()
         {
-            Id = 1;
-            Title = "test title";
-            Price = 1;
-            Quantity = 1;
-            Description = "test desc";
         }
         public Good(int id, string title, int price, int quantity, string description, string image) 
         {
