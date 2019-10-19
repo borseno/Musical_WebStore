@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -32,6 +33,9 @@ namespace Musical_WebStore_BlazorApp.Server
 
             services.AddDbContext<MusicalShopIdentityDbContext>(
                 options => options.UseSqlServer(connstr));
+
+            services.AddDefaultIdentity<IdentityUser>()
+                    .AddEntityFrameworkStores<MusicalShopIdentityDbContext>();
 
             services.AddMvc().AddNewtonsoftJson();
             services.AddResponseCompression(opts =>
