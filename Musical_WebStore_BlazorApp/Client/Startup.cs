@@ -7,6 +7,7 @@ namespace Musical_WebStore_BlazorApp.Client
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IAuthService, AuthService>();
         }
 
         public void Configure(IComponentsApplicationBuilder app)
