@@ -34,8 +34,7 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
             {
                 var errors = result.Errors.Select(x => x.Description);
 
-                return BadRequest(new RegisterResult { Successful = false, Errors = errors });
-
+                return Ok(new RegisterResult { Successful = false, Errors = errors });
             }
 
             return Ok(new RegisterResult { Successful = true });
