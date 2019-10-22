@@ -25,7 +25,7 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
         {
             var newUser = new User
             { 
-                UserName = model.Email, 
+                UserName = model.Username, 
                 Email = model.Email                
             };
 

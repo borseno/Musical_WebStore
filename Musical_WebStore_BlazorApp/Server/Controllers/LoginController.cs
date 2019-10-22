@@ -35,7 +35,7 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
 
             if (!result.Succeeded)
             {
-                return BadRequest(new LoginResult { Successful = false, Error = "Username and password are invalid." });
+                return Ok(new LoginResult { Successful = false, Error = "Username and password are invalid." });
             }
 
             var claims = new[]
