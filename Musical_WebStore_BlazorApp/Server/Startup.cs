@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Musical_WebStore_BlazorApp.Server.Data;
+using Musical_WebStore_BlazorApp.Server.Data.Models;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Linq;
@@ -34,7 +35,7 @@ namespace Musical_WebStore_BlazorApp.Server
             services.AddDbContext<MusicalShopIdentityDbContext>(
                 options => options.UseSqlServer(connstr));
 
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddDefaultIdentity<User>()
                     .AddEntityFrameworkStores<MusicalShopIdentityDbContext>();
 
             services.AddMvc().AddNewtonsoftJson();

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Musical_WebStore_BlazorApp.Server.Data.Models;
 using Musical_WebStore_BlazorApp.Shared;
 using System;
 using System.Collections.Generic;
@@ -18,10 +19,10 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
     public class LoginController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<User> _signInManager;
 
         public LoginController(IConfiguration configuration,
-                               SignInManager<IdentityUser> signInManager)
+                               SignInManager<User> signInManager)
         {
             _configuration = configuration;
             _signInManager = signInManager;
@@ -32,7 +33,10 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
         {
             var result = await _signInManager.PasswordSignInAsync(login.Email, login.Password, false, false);
 
-            if (!result.Succeeded) return BadRequest(new LoginResult { Successful = false, Error = "Username and password are invalid." });
+            if (!result.Succeeded)
+            {
+                return BadRequest(new LoginResult { Successful = false, Error = "Username and password are invalid." });
+            }
 
             var claims = new[]
             {

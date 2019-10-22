@@ -13,12 +13,9 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        // mock model, can be changed
-        private static UserModel LoggedOutUser = new UserModel { IsAuthenticated = false };
+        private readonly UserManager<User> _userManager;
 
-        private readonly UserManager<IdentityUser> _userManager;
-
-        public AccountsController(UserManager<IdentityUser> userManager)
+        public AccountsController(UserManager<User> userManager)
         {
             _userManager = userManager;
         }
@@ -26,7 +23,11 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]RegisterModel model)
         {
-            var newUser = new IdentityUser { UserName = model.Email, Email = model.Email };
+            var newUser = new User
+            { 
+                UserName = model.Email, 
+                Email = model.Email                
+            };
 
             var result = await _userManager.CreateAsync(newUser, model.Password);
 
