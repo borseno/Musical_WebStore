@@ -20,17 +20,27 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
 
         public LoginController(IConfiguration configuration,
-                               SignInManager<User> signInManager)
+                               SignInManager<User> signInManager,
+                               UserManager<User> userManager)
         {
             _configuration = configuration;
             _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginModel login)
         {
+            var user = await _userManager.FindByEmailAsync(login.Email);
+
+            if (!user.EmailConfirmed)
+            {
+                return EmailNotConfirmed();
+            }
+
             var result = await _signInManager.PasswordSignInAsync(login.Email, login.Password, false, false);
 
             if (!result.Succeeded)
@@ -56,6 +66,15 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
             );
 
             return Ok(new LoginResult { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token) });
+        }
+
+        private IActionResult EmailNotConfirmed() // todo : encapsulate this in an extension class
+        {
+            return Ok(new LoginResult
+            {
+                Successful = false,
+                Error = "Please, confirm your email following the link on your email box"
+            }); 
         }
     }
 }
