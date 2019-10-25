@@ -44,6 +44,13 @@
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </EditForm>
+
+        @if (Registering)
+        {
+            <div>
+                <p>Registering...</p>
+            </div>
+        }
     </div>
 </div>
 
@@ -51,12 +58,13 @@
 
     private RegisterModel RegisterModel = new RegisterModel();
     private bool ShowErrors;
-    private IEnumerable<string>
-    Errors;
+    private bool Registering;
+    private IEnumerable<string> Errors;
 
     private async Task HandleRegistration()
     {
         ShowErrors = false;
+        Registering = true;
 
         var result = await AuthService.Register(RegisterModel);
 
