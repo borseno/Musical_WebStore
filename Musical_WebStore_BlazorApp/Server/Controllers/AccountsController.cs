@@ -14,10 +14,12 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
+        private readonly IEmailSender _emailSender;
 
-        public AccountsController(UserManager<User> userManager)
+        public AccountsController(UserManager<User> userManager, IEmailSender emailSender)
         {
             _userManager = userManager;
+            _emailSender = emailSender;
         }
 
         [HttpPost]
@@ -38,7 +40,50 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
                 return Ok(new RegisterResult { Successful = false, Errors = errors });
             }
 
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
+
+            var url = Url.Action(
+                "Confirm", 
+                "EmailConfirmation", 
+                new { userId = newUser.Id, token }, 
+                protocol: HttpContext.Request.Scheme); // bug here
+            
+            await _emailSender.SendEmailAsync(newUser.Email, "Password confirmation", 
+                "Confirm your password by visiting the following link: " + url
+                );
+
             return Ok(new RegisterResult { Successful = true });
+        }
+    }
+
+    [Route("api/[controller]")]
+    [ApiController]
+    public class EmailConfirmationController : ControllerBase
+    {
+        private readonly UserManager<User> _userManager;
+
+        public EmailConfirmationController(UserManager<User> userManager)
+        {
+            _userManager = userManager;
+        }
+
+        [Route("")]
+        [HttpGet]
+        public async Task<IActionResult> Confirm(string userId, string token)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+
+            if (result.Succeeded)
+            {
+                return Redirect("/login");
+            }
+            else
+            {
+                // todo! redirect to some error page..
+                return Redirect("/");
+            }
         }
     }
 }

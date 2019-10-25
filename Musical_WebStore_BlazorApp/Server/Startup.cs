@@ -36,7 +36,8 @@ namespace Musical_WebStore_BlazorApp.Server
                 options => options.UseSqlServer(connstr));
 
             services.AddDefaultIdentity<User>()
-                    .AddEntityFrameworkStores<MusicalShopIdentityDbContext>();
+                    .AddEntityFrameworkStores<MusicalShopIdentityDbContext>()
+                    .AddDefaultTokenProviders();
 
             services.AddMvc().AddNewtonsoftJson();
             services.AddResponseCompression(opts =>
@@ -59,6 +60,8 @@ namespace Musical_WebStore_BlazorApp.Server
                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"]))
                         };
                     });
+
+            services.AddTransient<IEmailSender, MockeeMockersEmailSender>();
         }
 
         private string GetConnectionString(IWebHostEnvironment env)
