@@ -60,23 +60,27 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
     [ApiController]
     public class EmailConfirmationController : ControllerBase
     {
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<User> userManager;
+        private readonly SignInManager<User> signInManager;
 
-        public EmailConfirmationController(UserManager<User> userManager)
+        public EmailConfirmationController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
-            _userManager = userManager;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
         }
 
         [Route("")]
         [HttpGet]
         public async Task<IActionResult> Confirm(string userId, string token)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await userManager.FindByIdAsync(userId);
 
-            var result = await _userManager.ConfirmEmailAsync(user, token);
+            var result = await userManager.ConfirmEmailAsync(user, token);
 
             if (result.Succeeded)
             {
+                await signInManager.SignInAsync(user, true);
+
                 return Redirect("/login");
             }
             else
