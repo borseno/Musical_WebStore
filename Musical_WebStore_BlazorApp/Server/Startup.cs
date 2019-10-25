@@ -35,9 +35,11 @@ namespace Musical_WebStore_BlazorApp.Server
             services.AddDbContext<MusicalShopIdentityDbContext>(
                 options => options.UseSqlServer(connstr));
 
-            services.AddDefaultIdentity<User>()
-                    .AddEntityFrameworkStores<MusicalShopIdentityDbContext>()
-                    .AddDefaultTokenProviders();
+            services.AddDefaultIdentity<User>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            }).AddEntityFrameworkStores<MusicalShopIdentityDbContext>()
+              .AddDefaultTokenProviders();
 
             services.AddMvc().AddNewtonsoftJson();
             services.AddResponseCompression(opts =>
