@@ -73,11 +73,28 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> Confirm(string userId, string token)
         {
+            var succeeded = true;
+
+            if (String.IsNullOrWhiteSpace(userId) || String.IsNullOrWhiteSpace(token))
+            {
+                succeeded = false;
+            }
+
             var user = await userManager.FindByIdAsync(userId);
 
-            var result = await userManager.ConfirmEmailAsync(user, token);
+            if (user == null)
+            {
+                succeeded = false;
+            }
 
-            if (result.Succeeded)
+            if (succeeded)
+            {
+                var result = await userManager.ConfirmEmailAsync(user, token);
+
+                succeeded = result.Succeeded;
+            }
+
+            if (succeeded)
             {
                 await signInManager.SignInAsync(user, true);
 
@@ -86,7 +103,7 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
             else
             {
                 // todo! redirect to some error page..
-                return Redirect("/");
+                return Redirect("/confirmationError");
             }
         }
     }
