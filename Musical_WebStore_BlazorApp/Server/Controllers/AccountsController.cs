@@ -109,8 +109,6 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
 
             if (succeeded)
             {
-                await signInManager.SignInAsync(user, true);
-
                 return Redirect("/login");
             }
             else

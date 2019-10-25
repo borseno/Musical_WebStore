@@ -41,7 +41,7 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
                 return EmailNotConfirmed();
             }
 
-            var result = await _signInManager.PasswordSignInAsync(login.Email, login.Password, false, false);
+            var result = await _signInManager.PasswordSignInAsync(user.UserName, login.Password, false, false);
 
             if (!result.Succeeded)
             {
