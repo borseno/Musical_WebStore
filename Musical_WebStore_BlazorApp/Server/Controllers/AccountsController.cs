@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Musical_WebStore_BlazorApp.Server.Data.Models;
 using Musical_WebStore_BlazorApp.Shared;
 using System;
@@ -26,10 +27,15 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
         public async Task<IActionResult> Post([FromBody]RegisterModel model)
         {
             var newUser = new User
-            { 
-                UserName = model.Username, 
-                Email = model.Email                
+            {
+                UserName = model.Username,
+                Email = model.Email
             };
+
+            if (await EmailAlreadyInUse(model.Email))
+            {
+                return Ok(new RegisterResult { Successful = false, Errors = new[] { $"{model.Email} address is already in use" } });
+            }
 
             var result = await _userManager.CreateAsync(newUser, model.Password);
 
@@ -43,16 +49,23 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
 
             var url = Url.Action(
-                "Confirm", 
-                "EmailConfirmation", 
-                new { userId = newUser.Id, token }, 
+                "Confirm",
+                "EmailConfirmation",
+                new { userId = newUser.Id, token },
                 protocol: HttpContext.Request.Scheme); // bug here
-            
-            await _emailSender.SendEmailAsync(newUser.Email, "Password confirmation", 
+
+            await _emailSender.SendEmailAsync(newUser.Email, "Password confirmation",
                 "Confirm your password by visiting the following link: " + url
                 );
 
             return Ok(new RegisterResult { Successful = true });
+        }
+
+        private async Task<bool> EmailAlreadyInUse(string email)
+        {
+            var any = await _userManager.Users.AnyAsync(i => i.Email == email);
+
+            return any;
         }
     }
 
