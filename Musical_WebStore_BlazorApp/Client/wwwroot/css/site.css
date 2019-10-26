@@ -133,54 +133,17 @@ app {
         display: block;
     }
 }
-.all-instr {
-    text-align: center;
-}
-.item-instr {
-    width: 300px;
-    text-align: center;
-    display: inline-block;
-    margin: 10px;
-    background: white;
-    font-family: "Open Sans";
-    border: 2px solid black;
-}
-.item-instr:hover .purchase {
-    visibility: visible;
-    background: grey;
-    transition: .4s;
-}
-.purchase {
-    width: 100px;
-    height: 33px;
-    visibility: hidden;
-    position: absolute;
-    margin-top: 127px;
-    z-index: 1;
-    margin-left: -50px;
-    text-align: center;
-    color: white;
-}
 .top-row {
     z-index: 99;
 }
-.item-img {
-    vertical-align: central;
-    display: block;
-    width: 100%;
-    border-bottom: 1px solid grey;
+.inst-title {
+    text-align: center;
 }
-.item-list {
-    padding: 10px 0;
-}
-.item-list h3{
-    font-size:30px;
-}
-.inst-title{
-    text-align:center;
-}
-.price-instr {
-    font-size: 16px;
-    color: black;
+
+.sub-menu {
+    display: none;
+}   
+.nav-link:focus ~ .sub-menu,
+.sub-menu:hover {
     display: block;
 }

@@ -16,16 +16,40 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
     {
         private IEnumerable<Instrument> GetInstruments()
         {
-            for(int i = 1; i <= 25; i++)
-            {
-                yield return new Instrument(i, $"test{i}", i, i, $"test desc{i}", "test.jpg");
-            }
+                for (int i = 1; i <= 10; i++)
+                {
+                    yield return new Guitar(i, $"guitarTest{i}", i, i, $"test desc{i}", "test.jpg");
+                }
+                for (int i = 1; i <= 10; i++)
+                {
+                    yield return new Amplifier(i, $"amplifierTest{i}", i, i, $"test desc{i}", "test.jpg");
+                }
+                for (int i = 1; i <= 10; i++)
+                {
+                    yield return new Pedal(i, $"pedalTest{i}", i, i, $"test desc{i}", "test.jpg");
+                }
         }
         [HttpGet]
         public IEnumerable<Instrument> Get()
         {
             return GetInstruments().ToList();
         }
+
+        //[Route("guitars")]
+        //public IEnumerable<Instrument> Guitar()
+        //{
+        //    List<Instrument> guitarList = GetInstruments().ToList();
+        //    List<Instrument> finalList = new List<Instrument>();
+        //    foreach (var instrument in guitarList)
+        //    {
+        //        if (instrument.GetType().ToString() == "Guitar")
+        //        {
+        //            finalList.Add(instrument);
+        //        }
+        //    }
+        //    return finalList;
+        //}
+
     }
 }
 

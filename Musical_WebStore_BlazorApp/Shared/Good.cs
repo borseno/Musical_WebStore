@@ -17,7 +17,8 @@ namespace Musical_WebStore_BlazorApp.Shared
         public string Description { get; set; }
 
         public string Image { get; set; } 
-
+        
+        public string TypeName { get; set; }
         public Good()
         {
         }
@@ -29,6 +30,7 @@ namespace Musical_WebStore_BlazorApp.Shared
             Quantity = quantity;
             Description = description;
             Image = image;
+            TypeName = this.GetType().Name;
         }
     }   
 }

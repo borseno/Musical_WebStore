@@ -1,4 +1,5 @@
-﻿@page "/list"
+﻿@page "/list/{Type}"
+@page "/list"
 @using Musical_WebStore_BlazorApp.Shared
 @inject HttpClient Http
 <h3 class="inst-title">Instruments</h3>
@@ -9,26 +10,36 @@
 }
 else
 {
-<div class="all-instr">
-    @foreach (var instrument in instruments)
-    {
-        <div class="item-instr">
-            <button class="purchase">Add to Cart</button>
-            <img class="item-img" src="@instrument.Image" />
-            <div class="item-list">
-                <h3>@instrument.Title</h3>
-                <span class="price-instr">Price: @instrument.Price</span>
+    <div class="row">
+        @foreach (var instrument in instruments)
+        {
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <img class="card-img-top" src="guitar.jpg" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">@instrument.Title</h5>
+                        <h5 class="card-text">Price: $@instrument.Price</h5>
+                        <p class="card-text">@instrument.Description</p>
+                        <p class="card-text">TYPE: @instrument.TypeName</p>
+                        <a href="#" class="btn btn-primary">Add to Cart</a>
+                    </div>
+                </div>
             </div>
-        </div>
-    }
-</div>
+        }
+    </div>
 }
 
 @code {
-    Instrument[] instruments;
+    List<Instrument> instruments;
+    [Parameter]
+    public string Type { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        instruments = await Http.GetJsonAsync<Instrument[]>("api/Instruments");
+        instruments = await Http.GetJsonAsync<List<Instrument>>("api/Instruments");
+        if (!String.IsNullOrWhiteSpace(Type))
+        {
+            instruments = instruments.Where(i => i.TypeName == Type).ToList();
+        }
     }
 }
