@@ -30,6 +30,13 @@
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </EditForm>
+
+        @if (LogginIn)
+        {
+            <div>
+                <p>Logging in...</p>
+            </div>
+        }
     </div>
 </div>
 
@@ -37,11 +44,13 @@
 
     private LoginModel loginModel = new LoginModel();
     private bool ShowErrors;
+    private bool LogginIn;
     private string Error = "";
 
     private async Task HandleLogin()
     {
         ShowErrors = false;
+        LogginIn = true;
 
         var result = await AuthService.Login(loginModel);
 
@@ -53,6 +62,7 @@
         {
             Error = result.Error;
             ShowErrors = true;
+            LogginIn = false;   
         }
     }
 

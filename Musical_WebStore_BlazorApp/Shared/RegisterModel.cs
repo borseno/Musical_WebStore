@@ -8,6 +8,13 @@ namespace Musical_WebStore_BlazorApp.Shared
     public class RegisterModel
     {
         [Required]
+        [Display(Name="Username")]
+        [DataType(DataType.Text)]
+        [RegularExpression(@"^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$", ErrorMessage = "Usernames can consist of lowercase, capitals, alphanumerical characters, underscore and hyphens and spaces")]
+        [StringLength(24, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        public string Username { get; set; }
+
+        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }

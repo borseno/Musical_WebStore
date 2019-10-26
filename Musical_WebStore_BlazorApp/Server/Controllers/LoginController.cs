@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Musical_WebStore_BlazorApp.Server.Data.Models;
 using Musical_WebStore_BlazorApp.Shared;
 using System;
 using System.Collections.Generic;
@@ -18,21 +19,34 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
     public class LoginController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
 
         public LoginController(IConfiguration configuration,
-                               SignInManager<IdentityUser> signInManager)
+                               SignInManager<User> signInManager,
+                               UserManager<User> userManager)
         {
             _configuration = configuration;
             _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginModel login)
         {
-            var result = await _signInManager.PasswordSignInAsync(login.Email, login.Password, false, false);
+            var user = await _userManager.FindByEmailAsync(login.Email);
 
-            if (!result.Succeeded) return BadRequest(new LoginResult { Successful = false, Error = "Username and password are invalid." });
+            if (!user.EmailConfirmed)
+            {
+                return EmailNotConfirmed();
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(user.UserName, login.Password, false, false);
+
+            if (!result.Succeeded)
+            {
+                return Ok(new LoginResult { Successful = false, Error = "Username and password are invalid." });
+            }
 
             var claims = new[]
             {
@@ -52,6 +66,15 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
             );
 
             return Ok(new LoginResult { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token) });
+        }
+
+        private IActionResult EmailNotConfirmed() // todo : encapsulate this in an extension class
+        {
+            return Ok(new LoginResult
+            {
+                Successful = false,
+                Error = "Please, confirm your email following the link on your email box"
+            }); 
         }
     }
 }

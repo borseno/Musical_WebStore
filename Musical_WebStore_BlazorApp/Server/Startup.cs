@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Musical_WebStore_BlazorApp.Server.Data;
+using Musical_WebStore_BlazorApp.Server.Data.Models;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Linq;
@@ -34,8 +35,11 @@ namespace Musical_WebStore_BlazorApp.Server
             services.AddDbContext<MusicalShopIdentityDbContext>(
                 options => options.UseSqlServer(connstr));
 
-            services.AddDefaultIdentity<IdentityUser>()
-                    .AddEntityFrameworkStores<MusicalShopIdentityDbContext>();
+            services.AddDefaultIdentity<User>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            }).AddEntityFrameworkStores<MusicalShopIdentityDbContext>()
+              .AddDefaultTokenProviders();
 
             services.AddMvc().AddNewtonsoftJson();
             services.AddResponseCompression(opts =>
@@ -58,6 +62,8 @@ namespace Musical_WebStore_BlazorApp.Server
                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"]))
                         };
                     });
+
+            services.AddTransient<IEmailSender, MockeeMockersEmailSender>();
         }
 
         private string GetConnectionString(IWebHostEnvironment env)
