@@ -36,6 +36,11 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
         {
             var user = await _userManager.FindByEmailAsync(login.Email);
 
+            if (user == null)
+            {
+                return UserIsNullError();
+            }
+
             if (!user.EmailConfirmed)
             {
                 return EmailNotConfirmed();
@@ -66,6 +71,15 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
             );
 
             return Ok(new LoginResult { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token) });
+        }
+
+        private IActionResult UserIsNullError()
+        {
+            return Ok(new LoginResult
+            {
+                Successful = false,
+                Error = "This email address is not registered in the system"
+            });
         }
 
         private IActionResult EmailNotConfirmed() // todo : encapsulate this in an extension class

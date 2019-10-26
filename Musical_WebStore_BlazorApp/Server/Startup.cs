@@ -33,7 +33,7 @@ namespace Musical_WebStore_BlazorApp.Server
             string connstr = GetConnectionString(Environment);
 
             services.AddDbContext<MusicalShopIdentityDbContext>(
-                options => options.UseSqlServer(connstr));
+                options => options.UseInMemoryDatabase("Mmmmmmmmm=D"));
 
             services.AddDefaultIdentity<User>(options =>
             {
