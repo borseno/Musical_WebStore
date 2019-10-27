@@ -82,7 +82,7 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
             });
         }
 
-        private IActionResult EmailNotConfirmed() // todo : encapsulate this in an extension class
+        private IActionResult EmailNotConfirmed() 
         {
             return Ok(new LoginResult
             {

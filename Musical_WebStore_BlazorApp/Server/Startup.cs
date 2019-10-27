@@ -10,8 +10,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Musical_WebStore_BlazorApp.Server.Data;
 using Musical_WebStore_BlazorApp.Server.Data.Models;
-using Newtonsoft.Json.Serialization;
-using System;
 using System.Linq;
 using System.Text;
 
@@ -30,59 +28,15 @@ namespace Musical_WebStore_BlazorApp.Server
 
         public void ConfigureServices(IServiceCollection services)
         {
-            string connstr = GetConnectionString(Environment);
-
-            services.AddDbContext<MusicalShopIdentityDbContext>(
-                options => options.UseInMemoryDatabase("Mmmmmmmmm=D"));
-
-            services.AddDefaultIdentity<User>(options =>
-            {
-                options.User.RequireUniqueEmail = true;
-            }).AddEntityFrameworkStores<MusicalShopIdentityDbContext>()
-              .AddDefaultTokenProviders();
+            AddDatabaseProvider(services);
+            AddIdentity(services);
+            AddCompression(services);
+            AddAuthentication(services);
 
             services.AddMvc().AddNewtonsoftJson();
-            services.AddResponseCompression(opts =>
-            {
-                opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
-                    new[] { "application/octet-stream" });
-            });
-
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(options =>
-                    {
-                        options.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            ValidateIssuer = true,
-                            ValidateAudience = true,
-                            ValidateLifetime = true,
-                            ValidateIssuerSigningKey = true,
-                            ValidIssuer = Configuration["JwtIssuer"],
-                            ValidAudience = Configuration["JwtAudience"],
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"]))
-                        };
-                    });
-
             services.AddTransient<IEmailSender, MockeeMockersEmailSender>();
         }
 
-        private string GetConnectionString(IWebHostEnvironment env)
-        {
-            string dbName;
-
-            if (env.IsDevelopment())
-            {
-                dbName = "AuthenticationDB_Local";
-            }
-            else
-            {
-                dbName = "AuthenticationDB";
-            }
-
-            return Configuration.GetConnectionString(dbName);
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseResponseCompression();
@@ -106,6 +60,66 @@ namespace Musical_WebStore_BlazorApp.Server
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapFallbackToClientSideBlazor<Client.Startup>("index.html");
             });
+        }
+
+        private void AddAuthentication(IServiceCollection services)
+        {
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                                .AddJwtBearer(options =>
+                                {
+                                    options.TokenValidationParameters = new TokenValidationParameters
+                                    {
+                                        ValidateIssuer = true,
+                                        ValidateAudience = true,
+                                        ValidateLifetime = true,
+                                        ValidateIssuerSigningKey = true,
+                                        ValidIssuer = Configuration["JwtIssuer"],
+                                        ValidAudience = Configuration["JwtAudience"],
+                                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"]))
+                                    };
+                                });
+        }
+
+        private static void AddCompression(IServiceCollection services)
+        {
+            services.AddResponseCompression(opts =>
+            {
+                opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+                    new[] { "application/octet-stream" });
+            });
+        }
+
+        private static void AddIdentity(IServiceCollection services)
+        {
+            services.AddDefaultIdentity<User>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            }).AddEntityFrameworkStores<MusicalShopIdentityDbContext>()
+              .AddDefaultTokenProviders();
+        }
+
+        private void AddDatabaseProvider(IServiceCollection services)
+        {
+            string connstr = GetConnectionString(Environment);
+
+            services.AddDbContext<MusicalShopIdentityDbContext>(
+                options => options.UseInMemoryDatabase("Mmmmmmmmm=D"));
+        }
+
+        private string GetConnectionString(IWebHostEnvironment env)
+        {
+            string dbName;
+
+            if (env.IsDevelopment())
+            {
+                dbName = "AuthenticationDB_Local";
+            }
+            else
+            {
+                dbName = "AuthenticationDB";
+            }
+
+            return Configuration.GetConnectionString(dbName);
         }
     }
 }

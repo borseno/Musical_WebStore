@@ -1,5 +1,6 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using Musical_WebStore_BlazorApp.Client.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,12 +29,12 @@ namespace Musical_WebStore_BlazorApp.Client
 
             if (string.IsNullOrWhiteSpace(savedToken))
             {
-                return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+                return AuthenticationStateHelper.GetEmpty();
             }
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
 
-            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(savedToken), "jwt")));
+            return AuthenticationStateHelper.GetWithClaimsIdentity(ParseClaimsFromJwt(savedToken), "jwt");
         }
 
         public void MarkUserAsAuthenticated(string token)

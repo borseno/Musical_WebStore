@@ -16,40 +16,49 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
     {
         private IEnumerable<Instrument> GetInstruments()
         {
-                for (int i = 1; i <= 10; i++)
+            for (int i = 1; i <= 10; i++)
+            {
+                yield return new Guitar
                 {
-                    yield return new Guitar(i, $"guitarTest{i}", i, i, $"test desc{i}", "test.jpg");
-                }
-                for (int i = 1; i <= 10; i++)
+                    Id = i,
+                    Title = $"guitarTest{i}",
+                    Price = i,
+                    Quantity = i,
+                    Description = $"test desc{i}",
+                    Image = "test.jpg"
+                };
+            }
+            for (int i = 1; i <= 10; i++)
+            {
+                yield return new Amplifier
                 {
-                    yield return new Amplifier(i, $"amplifierTest{i}", i, i, $"test desc{i}", "test.jpg");
-                }
-                for (int i = 1; i <= 10; i++)
+                    Id = i,
+                    Title = $"guitarTest{i}",
+                    Price = i,
+                    Quantity = i,
+                    Description = $"test desc{i}",
+                    Image = "test.jpg"
+                };
+            }
+            for (int i = 1; i <= 10; i++)
+            {
+                yield return new Pedal
                 {
-                    yield return new Pedal(i, $"pedalTest{i}", i, i, $"test desc{i}", "test.jpg");
-                }
+                    Id = i,
+                    Title = $"guitarTest{i}",
+                    Price = i,
+                    Quantity = i,
+                    Description = $"test desc{i}",
+                    Image = "test.jpg"
+                };
+            }
         }
+
         [HttpGet]
         public IEnumerable<Instrument> Get()
         {
             return GetInstruments().ToList();
         }
-
-        //[Route("guitars")]
-        //public IEnumerable<Instrument> Guitar()
-        //{
-        //    List<Instrument> guitarList = GetInstruments().ToList();
-        //    List<Instrument> finalList = new List<Instrument>();
-        //    foreach (var instrument in guitarList)
-        //    {
-        //        if (instrument.GetType().ToString() == "Guitar")
-        //        {
-        //            finalList.Add(instrument);
-        //        }
-        //    }
-        //    return finalList;
-        //}
-
     }
 }
 

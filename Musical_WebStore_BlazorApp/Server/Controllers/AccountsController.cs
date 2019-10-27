@@ -34,7 +34,12 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
 
             if (await EmailAlreadyInUse(model.Email))
             {
-                return Ok(new RegisterResult { Successful = false, Errors = new[] { $"{model.Email} address is already in use" } });
+                var value = new RegisterResult 
+                { 
+                    Successful = false, Errors = new[] { $"{model.Email} address is already in use" } 
+                };
+
+                return Ok(value);
             }
 
             var result = await _userManager.CreateAsync(newUser, model.Password);
@@ -52,7 +57,7 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
                 "Confirm",
                 "EmailConfirmation",
                 new { userId = newUser.Id, token },
-                protocol: HttpContext.Request.Scheme); // bug here
+                protocol: HttpContext.Request.Scheme);
 
             await _emailSender.SendEmailAsync(newUser.Email, "Password confirmation",
                 "Confirm your password by visiting the following link: " + url
@@ -109,11 +114,11 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
 
             if (succeeded)
             {
+   
                 return Redirect("/login");
             }
             else
             {
-                // todo! redirect to some error page..
                 return Redirect("/confirmationError");
             }
         }

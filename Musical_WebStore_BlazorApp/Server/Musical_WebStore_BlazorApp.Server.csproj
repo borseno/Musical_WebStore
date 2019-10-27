@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\Migations\20191022153315_ChangedIdentityModel.cs" />
-    <Compile Remove="Data\Migations\20191022153315_ChangedIdentityModel.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191022153315_ChangedIdentityModel.cs" />
+    <Compile Remove="Data\Migrations\20191022153315_ChangedIdentityModel.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
