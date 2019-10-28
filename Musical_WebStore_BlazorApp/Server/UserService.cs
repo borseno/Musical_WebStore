@@ -25,5 +25,12 @@ namespace Musical_WebStore_BlazorApp.Services
             _userManager.ChangePasswordAsync(user, oldPassword, password);
             _userManager.UpdateAsync(user);
         }
+        public void ChangeData(ProfileModel model)
+        {
+            var user = _userManager.FindByEmailAsync(model.Email).Result;
+            user.UserName = model.Login;
+            _userManager.ChangePasswordAsync(user, model.OldPassword, model.Password);
+            _userManager.UpdateAsync(user);
+        }
     }
 }
