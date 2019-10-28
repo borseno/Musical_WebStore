@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Musical_WebStore_BlazorApp.Server.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Musical_WebStore_BlazorApp.Shared;
 
 namespace Musical_WebStore_BlazorApp.Server.Data
 {
@@ -14,6 +11,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data
         {
 
         }
+
+        public DbSet<Instrument> Instruments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
