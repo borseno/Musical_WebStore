@@ -29,7 +29,7 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
             user.UserName = model.Login;
             await _userManager.ChangePasswordAsync(user, model.OldPassword, model.Password);
             await _userManager.UpdateAsync(user);
-            return Ok();
+            return Ok(new LoginResult { Successful = true });
         }
 
         [HttpPost]
