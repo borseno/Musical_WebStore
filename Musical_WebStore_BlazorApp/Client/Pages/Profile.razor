@@ -1,6 +1,6 @@
 ﻿@page "/profile"
 @inject NavigationManager UriHelper
-
+@inject UserService userService
 <h1>Profile</h1>
 
 @if (ShowErrors)
@@ -23,6 +23,16 @@
                 <ValidationMessage For="@(() => profileModel.Email)" />
             </div>
             <div class="form-group">
+                <label for="email">Login</label>
+                <InputText id="email" class="form-control" @bind-Value="profileModel.Login" />
+                <ValidationMessage For="@(() => profileModel.Login)" />
+            </div>
+            <div class="form-group">
+                <label for="password">Old Password</label>
+                <InputText id="password" type="password" class="form-control" @bind-Value="profileModel.OldPassword" />
+                <ValidationMessage For="@(() => profileModel.OldPassword)" />
+            </div>
+            <div class="form-group">
                 <label for="password">Password</label>
                 <InputText id="password" type="password" class="form-control" @bind-Value="profileModel.Password" />
                 <ValidationMessage For="@(() => profileModel.Password)" />
@@ -42,8 +52,7 @@
     private async Task ChangeData()
     {
         ShowErrors = false;
-        
-        
+        userService.ChangeData(profileModel);
         UriHelper.NavigateTo("/");
     }
 
