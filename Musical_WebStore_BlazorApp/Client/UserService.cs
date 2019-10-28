@@ -15,7 +15,7 @@ namespace Musical_WebStore_BlazorApp.Services
         }
         public async Task<EditUserResult> ChangeData(ProfileModel model)
         {
-            var result = await _httpClient.PostJsonAsync<EditUserResult>("api/accounts", model);
+            var result = await _httpClient.PostJsonAsync<EditUserResult>("api/accounts/edit", model);
             return result;
         }
         
