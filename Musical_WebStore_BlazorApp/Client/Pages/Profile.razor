@@ -1,1 +1,50 @@
-﻿
+﻿@page "/profile"
+@inject NavigationManager UriHelper
+
+<h1>Profile</h1>
+
+@if (ShowErrors)
+{
+    <div class="alert alert-danger" role="alert">
+        <p>@Error</p>
+    </div>
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Perfonal information</h5>
+        <EditForm Model="@profileModel" OnValidSubmit="@ChangeData">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <InputText id="email" class="form-control" @bind-Value="profileModel.Email" />
+                <ValidationMessage For="@(() => profileModel.Email)" />
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <InputText id="password" type="password" class="form-control" @bind-Value="profileModel.Password" />
+                <ValidationMessage For="@(() => profileModel.Password)" />
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+
+    private ProfileModel profileModel = new ProfileModel();
+    private bool ShowErrors;
+    private bool ChangingData;
+    private string Error = "";
+
+    private async Task ChangeData()
+    {
+        ShowErrors = false;
+        
+        
+        UriHelper.NavigateTo("/");
+    }
+
+}
