@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Musical_WebStore_BlazorApp.Shared
 {
-    public class Good
+    public abstract class Good
     {
         public int Id { get; set; }
 
