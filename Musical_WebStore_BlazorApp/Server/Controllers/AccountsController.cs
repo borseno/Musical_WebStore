@@ -23,6 +23,7 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
             _emailSender = emailSender;
         }
         [HttpPost]
+        [Route("edit")]
         public async Task<IActionResult> Edit(ProfileModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
