@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Musical_WebStore_BlazorApp.Shared;
 using Musical_WebStore_BlazorApp.Client;
-
+using Musical_WebStore_BlazorApp.Server.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Musical_WebStore_BlazorApp.Server.Controllers
 {
@@ -14,26 +15,21 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
     [Route("api/[controller]")]
     public class InstrumentsController : Controller
     {
-        private IEnumerable<Instrument> GetInstruments()
+        private readonly MusicalShopIdentityDbContext ctx;
+
+        public InstrumentsController(MusicalShopIdentityDbContext ctx)
         {
-                for (int i = 1; i <= 10; i++)
-                {
-                    yield return new Guitar(i, $"guitarTest{i}", i, i, $"test desc{i}", "test.jpg");
-                }
-                for (int i = 1; i <= 10; i++)
-                {
-                    yield return new Amplifier(i, $"amplifierTest{i}", i, i, $"test desc{i}", "test.jpg");
-                }
-                for (int i = 1; i <= 10; i++)
-                {
-                    yield return new Pedal(i, $"pedalTest{i}", i, i, $"test desc{i}", "test.jpg");
-                }
+            this.ctx = ctx;
         }
+
+        private Task<Instrument[]> GetInstrumentsAsync() => ctx.Instruments.ToArrayAsync();
+
         [HttpGet]
-        public IEnumerable<Instrument> Get()
+    public async Task<IEnumerable<Instrument>> Get()
         {
-            return GetInstruments().ToList();
-        }
+            var instruments = await GetInstrumentsAsync();
+
+            return instruments;
     }
 }
 
