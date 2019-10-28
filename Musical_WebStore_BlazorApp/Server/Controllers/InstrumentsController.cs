@@ -25,12 +25,11 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
         private Task<Instrument[]> GetInstrumentsAsync() => ctx.Instruments.ToArrayAsync();
 
         [HttpGet]
-        public async Task<IEnumerable<Instrument>> Get()
+    public async Task<IEnumerable<Instrument>> Get()
         {
             var instruments = await GetInstrumentsAsync();
 
             return instruments;
-        }
     }
 }
 
