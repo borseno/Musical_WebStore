@@ -34,22 +34,6 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
         {
             return GetInstruments().ToList();
         }
-
-        //[Route("guitars")]
-        //public IEnumerable<Instrument> Guitar()
-        //{
-        //    List<Instrument> guitarList = GetInstruments().ToList();
-        //    List<Instrument> finalList = new List<Instrument>();
-        //    foreach (var instrument in guitarList)
-        //    {
-        //        if (instrument.GetType().ToString() == "Guitar")
-        //        {
-        //            finalList.Add(instrument);
-        //        }
-        //    }
-        //    return finalList;
-        //}
-
     }
 }
 
