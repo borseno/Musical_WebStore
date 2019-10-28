@@ -22,6 +22,15 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
             _userManager = userManager;
             _emailSender = emailSender;
         }
+        [HttpPost]
+        public async Task<IActionResult> Edit(ProfileModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            user.UserName = model.Login;
+            await _userManager.ChangePasswordAsync(user, model.OldPassword, model.Password);
+            await _userManager.UpdateAsync(user);
+            return Ok();
+        }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]RegisterModel model)
