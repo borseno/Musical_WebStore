@@ -2,6 +2,7 @@ using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Musical_WebStore_BlazorApp.Services;
 
 namespace Musical_WebStore_BlazorApp.Client
 {
@@ -13,6 +14,7 @@ namespace Musical_WebStore_BlazorApp.Client
             services.AddAuthorizationCore();
             services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<UserService, UserService>();
         }
 
         public void Configure(IComponentsApplicationBuilder app)
