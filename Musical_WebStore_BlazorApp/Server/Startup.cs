@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Musical_WebStore_BlazorApp.Server.Data;
 using Musical_WebStore_BlazorApp.Server.Data.Models;
+using System;
 using System.Linq;
 using System.Text;
 
@@ -45,6 +47,8 @@ namespace Musical_WebStore_BlazorApp.Server
             {
                 app.UseDeveloperExceptionPage();
                 app.UseBlazorDebugging();
+
+                EnsureDatabaseCreated(app);
             }
 
             app.UseStaticFiles();
@@ -60,6 +64,13 @@ namespace Musical_WebStore_BlazorApp.Server
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapFallbackToClientSideBlazor<Client.Startup>("index.html");
             });
+        }
+
+        private void EnsureDatabaseCreated(IApplicationBuilder app)
+        {
+            using var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            using var context = scope.ServiceProvider.GetService<MusicalShopIdentityDbContext>();
+            context.Database.EnsureCreated();
         }
 
         private void AddAuthentication(IServiceCollection services)
@@ -100,17 +111,25 @@ namespace Musical_WebStore_BlazorApp.Server
 
         private void AddDatabaseProvider(IServiceCollection services)
         {
-            string connstr = GetConnectionString(Environment);
+            if (Environment.IsDevelopment())
+            {
+                services.AddDbContext<MusicalShopIdentityDbContext>(
+                    options => options.UseInMemoryDatabase("mmmm"));
+            }
+            else
+            {
+                var connStr = GetConnectionString();
 
-            services.AddDbContext<MusicalShopIdentityDbContext>(
-                options => options.UseInMemoryDatabase("Mmmmmmmmm=D"));
+                services.AddDbContext<MusicalShopIdentityDbContext>(
+                    options => options.UseSqlServer(connStr));
+            }
         }
 
-        private string GetConnectionString(IWebHostEnvironment env)
+        private string GetConnectionString()
         {
             string dbName;
 
-            if (env.IsDevelopment())
+            if (Environment.IsDevelopment())
             {
                 dbName = "AuthenticationDB_Local";
             }
