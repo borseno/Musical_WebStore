@@ -1,7 +1,8 @@
 @page "/instrument"
 @page "/instrument/{Index}"
 @using Musical_WebStore_BlazorApp.Shared
-
+@inject CommentService commentService
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject HttpClient Http
 
 
@@ -26,7 +27,23 @@ else
         </div>
     </div>
     <div>
-    <input calss="form-control">
+    <EditForm Model="@commentModel" OnValidSubmit="@LeaveComment">
+        <div class="form-group">
+            <label for="email">Leave your comment here</label>
+            <InputText id="email" class="form-control" @bind-Value="commentModel.Text" />
+            <ValidationMessage For="@(() => commentModel.Text)" />
+        </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </EditForm>
+    </div>
+    <div>
+    @foreach(var com in comments)
+    {
+        <div>
+        <label>@com.Text</label>
+        <label>@com.AuthorId</label>
+        </div>
+    }
     </div>
 }
 @code {
@@ -35,12 +52,21 @@ else
     List<Comment> comments;
     [Parameter]
     public string Index { get; set; }
-
+    CommentModel commentModel = new CommentModel();
+    
     protected override async Task OnInitializedAsync()
     {
         comments = await Http.GetJsonAsync<List<Comment>>("api/Comments");
-        comments = comments.Where(c => c.AuthorId == int.Parse(Index)).ToList();
         instruments = await Http.GetJsonAsync<List<Instrument>>("api/Instruments");
         instrument = instruments.Single(i => i.Id == int.Parse(Index));
+    }
+
+    private async Task LeaveComment()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        commentModel.AuthorId = user.Identity.Name;
+        var result = await commentService.LeaveComment(commentModel);
+        await OnInitializedAsync();
     }
 }
