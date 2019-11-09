@@ -1,0 +1,20 @@
+@page "/Instrument/{Index}"
+@using Musical_WebStore_BlazorApp.Shared
+@inject HttpClient Http
+<h3 class="inst-title">Instruments</h3>
+
+@code {
+    List<Instrument> instruments;
+    [Parameter]
+    public string Type { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        instruments = await Http.GetJsonAsync<List<Instrument>>("api/Instruments");
+        if (!String.IsNullOrWhiteSpace(Type))
+        {
+            instruments = instruments.Where(i => i.TypeName == Type).ToList();
+        }
+    }
+}
+
