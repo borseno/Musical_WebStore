@@ -1,6 +1,7 @@
 @page "/instrument"
 @page "/instrument/{Index}"
 @using Musical_WebStore_BlazorApp.Shared
+
 @inject HttpClient Http
 
 
@@ -20,6 +21,7 @@ else
             <h1>@instrument.Quantity</h1>
             <h1>@instrument.Description</h1>
             <h1>@instrument.TypeName</h1>
+            <h1>@comments.Count</h1>
             
         </div>
     </div>
@@ -30,11 +32,14 @@ else
 @code {
     List<Instrument> instruments;
     Instrument instrument;
+    List<Comment> comments;
     [Parameter]
     public string Index { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        comments = await Http.GetJsonAsync<List<Comment>>("api/Comments");
+        comments = comments.Where(c => c.AuthorId == int.Parse(Index)).ToList();
         instruments = await Http.GetJsonAsync<List<Instrument>>("api/Instruments");
         instrument = instruments.Single(i => i.Id == int.Parse(Index));
     }
