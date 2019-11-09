@@ -1,6 +1,7 @@
 ﻿@page "/list"
 @page "/list/{Type}"
 @using Musical_WebStore_BlazorApp.Shared
+@using Microsoft.AspNetCore.Blazor
 @inject HttpClient Http
 <h3 class="inst-title">Instruments</h3>
 
@@ -10,7 +11,16 @@
 }
 else
 {
-    <div class="row">
+    <AuthorizeView>
+        <Authorized>
+            @if (context.User.IsInRole("Admin") || true)
+            {
+                <a href="#" class="btn btn-primary">Add a good...</a>
+            }
+        </Authorized>
+    </AuthorizeView>
+
+    <div class="row">     
         @foreach (var instrument in instruments)
         {
             <div class="col-md-4">
@@ -22,6 +32,15 @@ else
                         <p class="card-text">@instrument.Description</p>
                         <p class="card-text">TYPE: @instrument.TypeName</p>
                         <a href="#" class="btn btn-primary">Add to Cart</a>
+                        <AuthorizeView>
+                            <Authorized>
+                                @if (context.User.IsInRole("Admin") || true)
+                                {
+                                    <button class="btn btn-primary" @onclick="@(() => DeleteGood(@instrument.Id))">Delete</button>
+                                    <a href="#" class="btn btn-primary">Edit</a>
+                                }
+                            </Authorized>
+                        </AuthorizeView>
                     </div>
                 </div>
             </div>
@@ -33,6 +52,16 @@ else
     List<Instrument> instruments;
     [Parameter]
     public string Type { get; set; }
+
+    private void EditGood(int id)
+    {
+
+    }
+
+    private void DeleteGood(int id)
+    {
+        
+    }
 
     protected override async Task OnInitializedAsync()
     {
