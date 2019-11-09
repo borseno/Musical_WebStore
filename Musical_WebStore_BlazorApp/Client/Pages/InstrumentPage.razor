@@ -1,0 +1,37 @@
+@page "/instrument"
+@page "/instrument/{Index}"
+@using Musical_WebStore_BlazorApp.Shared
+@inject HttpClient Http
+
+
+@if (instruments == null)
+{
+    <p><em>Loading instruments...</em></p>
+}
+else
+{
+    <div style="display:flex; flex-direction: row">
+        <div style="width: 200px">
+            <img class="card-img-top" src="guitar.jpg" alt="Card image cap">
+        </div>
+        <div>
+            <h1>@instrument.Title</h1>
+            <h1>@instrument.Price</h1>
+            <h1>@instrument.Quantity</h1>
+            <h1>@instrument.Description</h1>
+            <h1>@instrument.TypeName</h1>
+        </div>
+    </div>
+}
+@code {
+    List<Instrument> instruments;
+    Instrument instrument;
+    [Parameter]
+    public string Index { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        instruments = await Http.GetJsonAsync<List<Instrument>>("api/Instruments");
+        instrument = instruments.Single(i => i.Id == int.Parse(Index));
+    }
+}
