@@ -15,7 +15,7 @@ namespace Musical_WebStore_BlazorApp.Services
         }
         public async Task<LeaveCommentResult> LeaveComment(CommentModel model)
         {
-            var result = await _httpClient.PostJsonAsync<LeaveCommentResult>("api/comments/samplecomment", model);
+            var result = await _httpClient.PostJsonAsync<LeaveCommentResult>("api/comments/addcomment", model);
             return result;
         }
         

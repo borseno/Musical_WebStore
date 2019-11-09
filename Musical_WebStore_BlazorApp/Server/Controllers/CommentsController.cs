@@ -10,6 +10,7 @@ using Musical_WebStore_BlazorApp.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Musical_WebStore_BlazorApp.Server.Data.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace Musical_WebStore_BlazorApp.Server.Controllers
 {
@@ -33,33 +34,19 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
 
             return comments;
         }
-        [Route("/{userId}/{text}/{instrumentId}")]
-        public async Task<IActionResult> LeaveComment(string userId, string text, int instrumentId)
-        {
+
+        [Route("addcomment")]
+        public async Task<IActionResult> LeaveCommentSample(CommentModel model)
+        {            
             ctx.Comments.Add(
                 new Comment()
                 {
-                    AuthorId = userId,
-                    Instrument = ctx.Instruments.Single(i => i.Id == instrumentId),
-                    Text = text
+                    AuthorId = model.AuthorId,
+                    InstrumentId = model.InstrumentId,
+                    Text = model.Text,
+                    Date = DateTime.Now
                 }
             );
-            await ctx.SaveChangesAsync();
-            return Ok();
-        }
-
-        [Route("samplecomment")]
-        public async Task<IActionResult> LeaveCommentSample(CommentModel model)
-        {
-            ctx.Comments.Add(new Comment());
-            // ctx.Comments.Add(
-            //     new Comment()
-            //     {
-            //         AuthorId = _userManager.FindByEmailAsync("vladislavburayk00@gmail.com").Result.Id,
-            //         Instrument = ctx.Instruments.Single(i => i.Id == -21),
-            //         Text = "text"
-            //     }
-            // );
             await ctx.SaveChangesAsync();
             return Ok(new LeaveCommentResult(){Successful = true});
         }
