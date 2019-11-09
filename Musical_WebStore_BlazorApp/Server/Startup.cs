@@ -129,7 +129,7 @@ namespace Musical_WebStore_BlazorApp.Server
         {
             string dbName;
 
-            if (Environment.IsDevelopment())
+            if (Environment.IsStaging())
             {
                 dbName = "AuthenticationDB_Local";
             }
