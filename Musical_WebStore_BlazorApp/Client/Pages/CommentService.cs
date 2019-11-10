@@ -18,6 +18,12 @@ namespace Musical_WebStore_BlazorApp.Services
             var result = await _httpClient.PostJsonAsync<LeaveCommentResult>("api/comments/addcomment", model);
             return result;
         }
+
+        public async Task<DeleteCommentResult> DeleteComment(DeleteCommentModel model)
+        {
+            var result = await _httpClient.PostJsonAsync<DeleteCommentResult>("api/comments/deletecomment", model);
+            return result;
+        }
         
     }
 }

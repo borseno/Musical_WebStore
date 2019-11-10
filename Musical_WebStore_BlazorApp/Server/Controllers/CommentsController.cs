@@ -38,10 +38,11 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
         [Route("addcomment")]
         public async Task<IActionResult> LeaveCommentSample(CommentModel model)
         {            
+            var user = await _userManager.FindByEmailAsync(model.AuthorId);
             ctx.Comments.Add(
                 new Comment()
                 {
-                    AuthorId = model.AuthorId,
+                    AuthorId = user.Id,
                     InstrumentId = model.InstrumentId,
                     Text = model.Text,
                     Date = DateTime.Now
@@ -49,6 +50,17 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
             );
             await ctx.SaveChangesAsync();
             return Ok(new LeaveCommentResult(){Successful = true});
+        }
+
+        [Route("deletecomment")]
+        public async Task<IActionResult> DeleteComment(DeleteCommentModel model)
+        {            
+            
+            ctx.Comments.Remove(
+                ctx.Comments.Single(c => c.Id == model.CommentId)
+            );
+            await ctx.SaveChangesAsync();
+            return Ok(new DeleteCommentResult(){Successful = true});
         }
     }
 }

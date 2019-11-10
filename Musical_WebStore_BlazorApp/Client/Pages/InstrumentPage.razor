@@ -91,4 +91,11 @@ else
         var result = await commentService.LeaveComment(commentModel);
         await OnInitializedAsync();
     }
+
+    private async Task DeleteComment(int id)
+    {
+        var deleteCommentModel = new DeleteCommentModel() {CommentId = id};
+        var result = await commentService.DeleteComment(deleteCommentModel);
+        await OnInitializedAsync();
+    }
 }

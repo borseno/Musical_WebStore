@@ -15,6 +15,7 @@ namespace Musical_WebStore_BlazorApp.Server.Data
         }
 
         public DbSet<Instrument> Instruments { get; set; }
+        public DbSet<Comment> Comments {get;set;}
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -147,6 +148,7 @@ namespace Musical_WebStore_BlazorApp.Server.Data
 
             blder.Entity<Amplifier>()
                 .HasData(amps);
+
         }
     }
 }
