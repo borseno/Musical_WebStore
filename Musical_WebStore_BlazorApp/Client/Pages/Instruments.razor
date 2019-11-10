@@ -15,7 +15,7 @@ else
         <Authorized>
             @if (context.User.IsInRole("Admin") || true)
             {
-                <a href="#" class="btn btn-primary">Add a good...</a>
+                <a href="/goodsmanagement/addGood" class="btn btn-primary">Add a good...</a>
             }
         </Authorized>
     </AuthorizeView>
