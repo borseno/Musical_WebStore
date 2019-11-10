@@ -1,0 +1,101 @@
+@page "/instrument"
+@page "/instrument/{Index}"
+@using Musical_WebStore_BlazorApp.Shared
+@inject CommentService commentService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject HttpClient Http
+
+
+@if (instruments == null)
+{
+    <p><em>Loading instruments...</em></p>
+}
+else
+{
+    <div style="display:flex; flex-direction: row">
+        <div style="width: 200px">
+            <img class="card-img-top" src="guitar.jpg" alt="Card image cap">
+        </div>
+        <div>
+            <h1>@instrument.Title</h1>
+            <h1>@instrument.Price</h1>
+            <h1>@instrument.Quantity</h1>
+            <h1>@instrument.Description</h1>
+            <h1>@instrument.TypeName</h1>
+            
+        </div>
+    </div>
+    @if(user.Identity.Name == null)
+    {
+        <p>Login to leave the comment.</p>
+    }
+    else
+    {
+    <div>
+    <EditForm Model="@commentModel" OnValidSubmit="@LeaveComment">
+        <div class="form-group">
+            <label for="email">Leave your comment here</label>
+            <InputText id="email" class="form-control" @bind-Value="commentModel.Text" />
+            <ValidationMessage For="@(() => commentModel.Text)" />
+        </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </EditForm>
+    </div>
+    }
+    <div>
+    <div class="container">
+	
+    @foreach(var com in comments)
+    {
+        <div class="row">
+		 <div class="media comment-box">
+            <div class="media-left">
+                <a href="#">
+                    <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
+                </a>
+            </div>
+            <div class="media-body">
+                <h4 class="media-heading">@com.AuthorId</h4>
+                <p>@com.Text</p>
+            </div>
+        </div>
+        </div>
+    }
+	
+</div>
+    </div>
+}
+@code {
+    List<Instrument> instruments;
+    Instrument instrument;
+    List<Comment> comments;
+    System.Security.Claims.ClaimsPrincipal user;
+    [Parameter]
+    public string Index { get; set; }
+    CommentModel commentModel = new CommentModel();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        user = authState.User;
+        comments = await Http.GetJsonAsync<List<Comment>>("api/Comments");
+        comments = comments.Where(c => c.InstrumentId == int.Parse(Index)).ToList();
+        instruments = await Http.GetJsonAsync<List<Instrument>>("api/Instruments");
+        instrument = instruments.Single(i => i.Id == int.Parse(Index));
+    }
+
+    private async Task LeaveComment()
+    {
+        commentModel.AuthorId = user.Identity.Name;
+        commentModel.InstrumentId = int.Parse(Index);
+        var result = await commentService.LeaveComment(commentModel);
+        await OnInitializedAsync();
+    }
+
+    private async Task DeleteComment(int id)
+    {
+        var deleteCommentModel = new DeleteCommentModel() {CommentId = id};
+        var result = await commentService.DeleteComment(deleteCommentModel);
+        await OnInitializedAsync();
+    }
+}
