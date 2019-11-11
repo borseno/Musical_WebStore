@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Musical_WebStore_BlazorApp.Server.Data;
 using Musical_WebStore_BlazorApp.Server.Data.Models;
+using Musical_WebStore_BlazorApp.Server.Services;
 using System;
 using System.Linq;
 using System.Text;
@@ -37,6 +38,7 @@ namespace Musical_WebStore_BlazorApp.Server
 
             services.AddMvc().AddNewtonsoftJson();
             services.AddTransient<IEmailSender, MockeeMockersEmailSender>();
+            services.AddTransient<IFileSavingService, FileSavingService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
