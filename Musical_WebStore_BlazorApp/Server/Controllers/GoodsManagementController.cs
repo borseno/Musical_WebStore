@@ -16,7 +16,7 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   // [Authorize("Admin")]
+    // [Authorize("Admin")]
     public class GoodsManagementController : ControllerBase
     {
         private readonly MusicalShopIdentityDbContext ctx;
@@ -30,7 +30,42 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
 
         [HttpPost]
         [Route("[action]")]
+        public async Task<IActionResult> EditGood(EditGoodModel model)
+        {
+            Instrument instrument = await GetReadyToAddInstrument(model);
+            instrument.Id = model.Id;
+
+            var entity = await ctx.FindAsync<Instrument>(instrument.Id);
+
+            if (entity == null)
+            {
+                throw new InvalidOperationException("null entity at editgood");
+            }
+
+            ctx.Entry(entity).CurrentValues.SetValues(instrument);
+
+            await ctx.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("[action]/{id}")]
+        public ValueTask<Instrument> GetGood(int id) => ctx.FindAsync<Instrument>(id);
+           
+        [HttpPost]
+        [Route("[action]")]
         public async Task<IActionResult> AddGood(AddGoodModel model)
+        {
+            Instrument instrument = await GetReadyToAddInstrument(model);
+
+            await ctx.Instruments.AddAsync(instrument);
+            await ctx.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        private async Task<Instrument> GetReadyToAddInstrument(AddGoodModel model)
         {
             var localFilePath = await fileSavingService.SaveFileAsync(model.ImageBytes, model.ImageType, "images");
 
@@ -44,10 +79,7 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
                 Image = localFilePath
             };
 
-            await ctx.Instruments.AddAsync(instrument);
-            await ctx.SaveChangesAsync();
-
-            return Ok();
+            return instrument;
         }
     }
 }
