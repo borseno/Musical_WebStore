@@ -2,6 +2,7 @@
 @page "/list/{Type}"
 @using Musical_WebStore_BlazorApp.Shared
 @using Microsoft.AspNetCore.Blazor
+@using System.IO;
 @inject HttpClient Http
 <h3 class="inst-title">Instruments</h3>
 
@@ -25,7 +26,9 @@ else
         {
             <div class="col-md-4">
                 <div class="card text-center">
-                    <a href='instrument/@instrument.Id'><img href=# class="card-img-top" src="guitar.jpg" alt="Card image cap"></a>
+                    <a href='instrument/@instrument.Id'>
+                        <img href=# class="card-img-top" src="@instrument.Image" alt="Card image cap">
+                    </a>
                     <div class="card-body">
                         <h5 class="card-title">@instrument.Title</h5>
                         <h5 class="card-text">Price: $@instrument.Price</h5>
