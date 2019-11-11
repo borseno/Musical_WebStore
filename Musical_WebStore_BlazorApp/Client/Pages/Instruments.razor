@@ -40,7 +40,7 @@ else
                                 @if (context.User.IsInRole("Admin") || true)
                                 {
                                     <button class="btn btn-primary" @onclick="@(() => DeleteGood(@instrument.Id))">Delete</button>
-                                    <a href="#" class="btn btn-primary">Edit</a>
+                                    <a href="goodsmanagement/editGood/@instrument.Id" class="btn btn-primary">Edit</a>
                                 }
                             </Authorized>
                         </AuthorizeView>
