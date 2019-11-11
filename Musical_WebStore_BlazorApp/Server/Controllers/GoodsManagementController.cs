@@ -30,6 +30,23 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
 
         [HttpPost]
         [Route("[action]")]
+        public async Task<IActionResult> DeleteGood(DeleteGoodModel m)
+        {
+            var instrument = new Instrument
+            {
+                Id = m.Id
+            };
+
+            ctx.Instruments.Attach(instrument);
+            ctx.Instruments.Remove(instrument);
+
+            await ctx.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("[action]")]
         public async Task<IActionResult> EditGood(EditGoodModel model)
         {
             Instrument instrument = await GetReadyToAddInstrument(model);

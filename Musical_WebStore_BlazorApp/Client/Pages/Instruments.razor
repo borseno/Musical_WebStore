@@ -3,7 +3,7 @@
 @using Musical_WebStore_BlazorApp.Shared
 @using Microsoft.AspNetCore.Blazor
 @using System.IO;
-@inject HttpClient Http
+@inject HttpClient client
 <h3 class="inst-title">Instruments</h3>
 
 @if (instruments == null)
@@ -21,7 +21,7 @@ else
         </Authorized>
     </AuthorizeView>
 
-    <div class="row">     
+    <div class="row">
         @foreach (var instrument in instruments)
         {
             <div class="col-md-4">
@@ -56,19 +56,16 @@ else
     [Parameter]
     public string Type { get; set; }
 
-    private void EditGood(int id)
+    private async Task DeleteGood(int id)
     {
+        var obj = new DeleteGoodModel { Id = id };
 
-    }
-
-    private void DeleteGood(int id)
-    {
-        
+        await client.PostJsonAsync("api/Goodmanagement/deletegood", obj);
     }
 
     protected override async Task OnInitializedAsync()
     {
-        instruments = await Http.GetJsonAsync<List<Instrument>>("api/Instruments");
+        instruments = await client.GetJsonAsync<List<Instrument>>("api/Instruments");
         if (!String.IsNullOrWhiteSpace(Type))
         {
             instruments = instruments.Where(i => i.TypeName == Type).ToList();
