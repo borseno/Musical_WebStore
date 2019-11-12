@@ -1,14 +1,17 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Musical_WebStore_BlazorApp.Server.Data;
+using Musical_WebStore_BlazorApp.Server.Data.Models;
 using Musical_WebStore_BlazorApp.Server.Helpers;
 using Musical_WebStore_BlazorApp.Server.Services;
 
 namespace Musical_WebStore_BlazorApp.Server
 {
+
     public class Startup
     {
         public IConfiguration Configuration { get; }
@@ -22,7 +25,7 @@ namespace Musical_WebStore_BlazorApp.Server
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDatabaseProvider( Configuration, Environment);
+            services.AddDatabaseProvider(Configuration, Environment);
             services.AddIdentity();
             services.AddCompression();
             services.AddAuthentication(Configuration);
@@ -32,7 +35,8 @@ namespace Musical_WebStore_BlazorApp.Server
             services.AddTransient<IFileSavingService, FileSavingService>();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+            UserManager<User> um, RoleManager<IdentityRole> rm)
         {
             app.UseResponseCompression();
 
@@ -40,9 +44,8 @@ namespace Musical_WebStore_BlazorApp.Server
             {
                 app.UseDeveloperExceptionPage();
                 app.UseBlazorDebugging();
-
             }
-            
+
             if (Configuration.GetDatabaseType() == DatabaseType.InMemory)
             {
                 StartupHelper.EnsureDatabaseCreated<MusicalShopIdentityDbContext>(app.ApplicationServices);
@@ -61,6 +64,11 @@ namespace Musical_WebStore_BlazorApp.Server
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapFallbackToClientSideBlazor<Client.Startup>("index.html");
             });
+
+            if (env.IsDevelopment())
+            {
+                IdentityDataInitializer.SeedData(um, rm);
+            }
         }
 
     }
