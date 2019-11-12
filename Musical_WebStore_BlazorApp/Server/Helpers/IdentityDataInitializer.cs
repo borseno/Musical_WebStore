@@ -20,7 +20,8 @@ namespace Musical_WebStore_BlazorApp.Server.Helpers
                 var user = new User
                 {
                     UserName = "test_user",
-                    Email = "test_user@localhost"
+                    Email = "test_user@localhost", 
+                    EmailConfirmed = true
                 };
 
                 IdentityResult result = userManager.CreateAsync(user, "123abcG$").GetAwaiter().GetResult();
@@ -40,9 +41,9 @@ namespace Musical_WebStore_BlazorApp.Server.Helpers
                 var user = new User
                 {
                     UserName = "test_admin",
-                    Email = "test_admin@localhost"
+                    Email = "test_admin@localhost",
+                    EmailConfirmed = true
                 };
-
 
                 IdentityResult result = userManager.CreateAsync(user, "123abcG$").GetAwaiter().GetResult();
 

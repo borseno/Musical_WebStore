@@ -14,7 +14,7 @@ else
 {
     <AuthorizeView>
         <Authorized>
-            @if (context.User.IsInRole("Admin") || true)
+            @if (context.User.IsInRole("Admin"))
             {
                 <a href="/goodsmanagement/addGood" class="btn btn-primary">Add a good...</a>
             }
@@ -37,7 +37,7 @@ else
                         <a href="#" class="btn btn-primary">Add to Cart</a>
                         <AuthorizeView>
                             <Authorized>
-                                @if (context.User.IsInRole("Admin") || true)
+                                @if (context.User.IsInRole("Admin"))
                                 {
                                     <button class="btn btn-primary" @onclick="@(() => DeleteGood(@instrument.Id))">Delete</button>
                                     <a href="goodsmanagement/editGood/@instrument.Id" class="btn btn-primary">Edit</a>
