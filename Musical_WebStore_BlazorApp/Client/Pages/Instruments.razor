@@ -24,10 +24,10 @@ else
     <div class="row">
         @foreach (var instrument in instruments)
         {
-            <div class="col-md-4">
+            <div class="col-6 col-sm-3 p-2">
                 <div class="card text-center">
                     <a href='instrument/@instrument.Id'>
-                        <img href=# class="card-img-top" src="@instrument.Image" alt="Card image cap">
+                        <img href=# class="card-img-top pt-2" src="@instrument.Image" alt="Card image cap" style="height: 400px; width: auto;">
                     </a>
                     <div class="card-body">
                         <h5 class="card-title">@instrument.Title</h5>
