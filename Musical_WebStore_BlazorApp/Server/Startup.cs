@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Musical_WebStore_BlazorApp.Server.Data;
 using Musical_WebStore_BlazorApp.Server.Data.Models;
+using Musical_WebStore_BlazorApp.Server.Helpers;
 using Musical_WebStore_BlazorApp.Server.Services;
 using System;
 using System.Linq;
@@ -50,7 +50,11 @@ namespace Musical_WebStore_BlazorApp.Server
                 app.UseDeveloperExceptionPage();
                 app.UseBlazorDebugging();
 
-                EnsureDatabaseCreated(app);
+            }
+            
+            if (Configuration.GetDatabaseType() == DatabaseType.InMemory)
+            {
+                EnsureDatabaseCreated(app.ApplicationServices);
             }
 
             app.UseStaticFiles();
@@ -68,9 +72,9 @@ namespace Musical_WebStore_BlazorApp.Server
             });
         }
 
-        private void EnsureDatabaseCreated(IApplicationBuilder app)
+        private void EnsureDatabaseCreated(IServiceProvider serviceProvider)
         {
-            using var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
             using var context = scope.ServiceProvider.GetService<MusicalShopIdentityDbContext>();
             context.Database.EnsureCreated();
         }
@@ -113,31 +117,33 @@ namespace Musical_WebStore_BlazorApp.Server
 
         private void AddDatabaseProvider(IServiceCollection services)
         {
-            if (Environment.IsDevelopment())
+            var databaseType = Configuration.GetDatabaseType();
+
+            if (databaseType == DatabaseType.InMemory)
             {
                 services.AddDbContext<MusicalShopIdentityDbContext>(
-                    options => options.UseInMemoryDatabase("mmmm"));
+                    options => options.UseInMemoryDatabase("random_name"));
             }
-            else
-            {
-                var connStr = GetConnectionString();
+            if (databaseType == DatabaseType.SQLSERVER)
+            {                
+                var connStr = GetConnectionString(databaseType);
 
                 services.AddDbContext<MusicalShopIdentityDbContext>(
                     options => options.UseSqlServer(connStr));
             }
         }
 
-        private string GetConnectionString()
+        private string GetConnectionString(DatabaseType type)
         {
             string dbName;
 
-            if (Environment.IsStaging())
+            if (Environment.IsDevelopment())
             {
-                dbName = "AuthenticationDB_Local";
+                dbName = $"{(int)type}_AuthenticationDB_Local";
             }
             else
             {
-                dbName = "AuthenticationDB";
+                dbName = $"{(int)type}_AuthenticationDB";
             }
 
             return Configuration.GetConnectionString(dbName);
