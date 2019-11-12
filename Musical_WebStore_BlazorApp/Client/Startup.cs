@@ -16,6 +16,7 @@ namespace Musical_WebStore_BlazorApp.Client
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<UserService, UserService>();
             services.AddScoped<CommentService, CommentService>();
+            services.AddScoped<StarService, StarService>();
         }
 
         public void Configure(IComponentsApplicationBuilder app)
