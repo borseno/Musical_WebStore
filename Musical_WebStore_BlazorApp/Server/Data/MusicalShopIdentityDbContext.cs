@@ -44,49 +44,9 @@ namespace Musical_WebStore_BlazorApp.Server.Data
 
     public static class ModelBuilderExtensions
     {
-        private static IEnumerable<Instrument> GetInstruments()
+        private static IEnumerable<Guitar> GetGuitars(int length, int offset)
         {
-            for (int i = 1; i <= 10; i++)
-            {
-                yield return new Guitar
-                {
-                    Id = -i,
-                    Title = $"guitarTest{i}",
-                    Price = i,
-                    Quantity = i,
-                    Description = $"test desc{i}",
-                    Image = "test.jpg"
-                };
-            }
-            for (int i = 1; i <= 10; i++)
-            {
-                yield return new Amplifier
-                {
-                    Id = -i,
-                    Title = $"amplifierTest{i}",
-                    Price = i,
-                    Quantity = i,
-                    Description = $"test desc{i}",
-                    Image = "test.jpg"
-                };
-            }
-            for (int i = 1; i <= 10; i++)
-            {
-                yield return new Pedal
-                {
-                    Id = -i,
-                    Title = $"pedalTest{i}",
-                    Price = i,
-                    Quantity = i,
-                    Description = $"test desc{i}",
-                    Image = "test.jpg"
-                };
-            }
-        }
-
-        private static IEnumerable<Guitar> GetGuitars(int offset)
-        {
-            for (int i = 1; i <= 10; i++)
+            for (int i = 1; i <= length; i++)
             {
                 yield return new Guitar
                 {
@@ -100,9 +60,9 @@ namespace Musical_WebStore_BlazorApp.Server.Data
             }
         }
 
-        private static IEnumerable<Amplifier> GetAmplifiers(int offset)
+        private static IEnumerable<Amplifier> GetAmplifiers(int length, int offset)
         {
-            for (int i = 1; i <= 10; i++)
+            for (int i = 1; i <= length; i++)
             {
                 yield return new Amplifier
                 {
@@ -116,7 +76,7 @@ namespace Musical_WebStore_BlazorApp.Server.Data
             }
         }
 
-        private static IEnumerable<Pedal> GetPedals(int offset)
+        private static IEnumerable<Pedal> GetPedals(int length, int offset)
         {
             for (int i = 1; i <= 10; i++)
             {
@@ -136,9 +96,9 @@ namespace Musical_WebStore_BlazorApp.Server.Data
         {
             var @base = 10;
 
-            var pedals = GetPedals(@base * 1).ToArray();
-            var amps = GetAmplifiers(@base * 2).ToArray();
-            var guitars = GetGuitars(@base * 3).ToArray();
+            var pedals = GetPedals(@base, @base * 0).ToArray();
+            var amps = GetAmplifiers(@base, @base * 1).ToArray();
+            var guitars = GetGuitars(@base, @base * 2).ToArray();
 
             blder.Entity<Pedal>()
                 .HasData(pedals);
