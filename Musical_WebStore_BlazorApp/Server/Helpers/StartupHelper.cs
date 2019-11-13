@@ -55,10 +55,11 @@ namespace Musical_WebStore_BlazorApp.Server.Helpers
 
         public static void AddIdentity(this IServiceCollection services)
         {
-            services.AddIdentity<User, IdentityRole>(options =>
+            services.AddDefaultIdentity<User>(options =>
             {
                 options.User.RequireUniqueEmail = true;
-            }).AddEntityFrameworkStores<MusicalShopIdentityDbContext>()
+            }).AddRoles<IdentityRole>()
+              .AddEntityFrameworkStores<MusicalShopIdentityDbContext>()
               .AddDefaultTokenProviders();
         }
 
