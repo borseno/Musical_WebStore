@@ -69,9 +69,14 @@ else
             </div>
             <div class="media-body">
                 <h4 class="media-heading">@com.AuthorId</h4>
-                <a @onclick="@(() => DeleteComment(com.Id))">
-                <label>Delete</label>
-                </a>
+               <AuthorizeView>
+                    <Authorized>
+                        @if (context.User.IsInRole("Admin") || com.Id == -1)
+                        {
+                            <button @onclick="@(() => DeleteComment(com.Id))">Delete</button>
+                        }
+                    </Authorized>
+               </AuthorizeView>
                 <p>@com.Text</p>
             </div>
         </div>
