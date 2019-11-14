@@ -52,7 +52,9 @@ else
 }
 
 @code {
-    List<Instrument> instruments;
+    List<Instrument> all_instruments = null;
+
+    List<Instrument> instruments = null;
     [Parameter]
     public string Type { get; set; }
 
@@ -60,16 +62,27 @@ else
     {
         var obj = new DeleteGoodModel { Id = id };
 
-        await client.PostJsonAsync("api/Goodsmanagement/deletegood", obj);
-        await OnInitializedAsync();
+        await client.PostJsonAsync("api/Goodmanagement/deletegood", obj);
     }
-
+    protected override void OnParametersSet()
+    {
+        RefreshFilter();
+        Console.WriteLine(Type);
+    }
     protected override async Task OnInitializedAsync()
     {
         instruments = await client.GetJsonAsync<List<Instrument>>("api/Instruments");
+        all_instruments = instruments;
+    }
+    private void RefreshFilter()
+    {
         if (!String.IsNullOrWhiteSpace(Type))
         {
-            instruments = instruments.Where(i => i.TypeName == Type).ToList();
+            instruments = all_instruments.Where(i => i.TypeName == Type).ToList();
+        }
+        else
+        {
+            instruments = all_instruments;
         }
     }
 }
