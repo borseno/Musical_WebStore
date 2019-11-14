@@ -85,7 +85,7 @@ else
     {
         if (!String.IsNullOrWhiteSpace(Type))
         {
-            instruments = all_instruments.Where(i => i.TypeName == Type).ToList();
+            instruments = all_instruments?.Where(i => i.TypeName == Type).ToList();
         }
         else
         {
