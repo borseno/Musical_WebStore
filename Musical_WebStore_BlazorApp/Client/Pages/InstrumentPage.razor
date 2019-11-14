@@ -2,6 +2,7 @@
 @page "/instrument/{Index}"
 @using Musical_WebStore_BlazorApp.Shared
 @inject CommentService commentService
+@inject StarService starService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject HttpClient Http
 
@@ -25,6 +26,18 @@ else
             
         </div>
     </div>
+
+
+@code{ 
+    int[] list = new int[]{ 0, 1, 2, 3, 4 };
+}
+    <div>
+    @foreach(var l in list)
+    {
+        <label id="@l" @onclick="@(() => LeaveStar(l))">@starsSymbols[l]</label>
+    }
+    </div>
+
     @if(user.Identity.Name == null)
     {
         <p>Login to leave the comment.</p>
@@ -56,6 +69,14 @@ else
             </div>
             <div class="media-body">
                 <h4 class="media-heading">@com.AuthorId</h4>
+               <AuthorizeView>
+                    <Authorized>
+                        @if (context.User.IsInRole("Admin") || com.Id == -1)
+                        {
+                            <button @onclick="@(() => DeleteComment(com.Id))">Delete</button>
+                        }
+                    </Authorized>
+               </AuthorizeView>
                 <p>@com.Text</p>
             </div>
         </div>
@@ -69,11 +90,13 @@ else
     List<Instrument> instruments;
     Instrument instrument;
     List<Comment> comments;
+    List<Star> stars;
+    int mark;
     System.Security.Claims.ClaimsPrincipal user;
     [Parameter]
     public string Index { get; set; }
     CommentModel commentModel = new CommentModel();
-    
+    string[] starsSymbols = new string[5];
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -82,6 +105,39 @@ else
         comments = comments.Where(c => c.InstrumentId == int.Parse(Index)).ToList();
         instruments = await Http.GetJsonAsync<List<Instrument>>("api/Instruments");
         instrument = instruments.Single(i => i.Id == int.Parse(Index));
+        stars = await Http.GetJsonAsync<List<Star>>("api/Stars");
+        if(stars.Count() != 0)
+        {
+            int sum = stars.Where(s => s.InstrumentId == int.Parse(Index)).Sum(star => star.Mark);
+            int count = stars.Where(str => str.InstrumentId == int.Parse(Index)).Count();
+            if(count != 0)
+            {
+                mark = sum/count;
+            }   
+            else
+            {
+                mark = 0;
+            }
+        }
+        else
+        {
+            mark = 0;
+        }
+
+        
+        for(int x = 0; x < 5; x++)
+        {
+            if(x < mark)
+            {
+                starsSymbols[x] = "★";
+            }
+            else
+            {
+                starsSymbols[x] = "☆";
+            }
+            
+        }
+        
     }
 
     private async Task LeaveComment()
@@ -96,6 +152,15 @@ else
     {
         var deleteCommentModel = new DeleteCommentModel() {CommentId = id};
         var result = await commentService.DeleteComment(deleteCommentModel);
+        await OnInitializedAsync();
+    }
+    
+    private async Task LeaveStar(int mark)
+    {
+        StarModel starModel = new StarModel() { Mark = mark };
+        starModel.AuthorId = user.Identity.Name;
+        starModel.InstrumentId = int.Parse(Index);
+        var result = await starService.LeaveStar(starModel);
         await OnInitializedAsync();
     }
 }

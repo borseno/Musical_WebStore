@@ -53,10 +53,16 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
                 return Ok(new LoginResult { Successful = false, Error = "Username and password are invalid." });
             }
 
-            var claims = new[]
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var claims = new List<Claim>();
+
+            claims.Add(new Claim(ClaimTypes.Name, login.Email));
+
+            foreach (var role in roles)
             {
-                new Claim(ClaimTypes.Name, login.Email)
-            };
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

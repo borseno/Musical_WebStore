@@ -16,7 +16,7 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    // [Authorize("Admin")]
+    [Authorize("Admin")]
     public class GoodsManagementController : ControllerBase
     {
         private readonly MusicalShopIdentityDbContext ctx;
