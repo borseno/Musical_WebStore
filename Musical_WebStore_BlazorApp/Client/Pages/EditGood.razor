@@ -70,6 +70,7 @@
     private EditGoodModel EditGoodModel = new EditGoodModel();
     private bool IsSending = false;
 
+    private static bool ValidateType(string type) => ! String.IsNullOrWhiteSpace(type);
     private static bool ValidateFile(IFileListEntry file) => file.Type.StartsWith(HtmlImageIdentifier);
 
     protected override async Task OnInitializedAsync()
@@ -115,6 +116,9 @@
     private async Task HandleEditing()
     {
         if (EditGoodModel.ImageType == null || EditGoodModel.ImageBytes == null)
+            return;
+
+        if (!ValidateType(EditGoodModel.TypeName))
             return;
 
         IsSending = true;
