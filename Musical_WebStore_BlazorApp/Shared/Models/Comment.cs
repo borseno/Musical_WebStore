@@ -10,6 +10,6 @@ namespace Musical_WebStore_BlazorApp.Shared
         public string Text {get;set;}
         public DateTime Date {get;set;}
         public int InstrumentId {get;set;}
-        public string AuthorId {get;set;}
+        public virtual UserLimited User {get;set;}
     }
 }

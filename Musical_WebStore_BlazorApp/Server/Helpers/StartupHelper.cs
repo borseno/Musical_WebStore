@@ -14,6 +14,7 @@ using Musical_WebStore_BlazorApp.Server.Helpers;
 using System;
 using System.Linq;
 using System.Text;
+using Microsoft.EntityFrameworkCore.Proxies;
 
 namespace Musical_WebStore_BlazorApp.Server.Helpers
 {
@@ -70,7 +71,9 @@ namespace Musical_WebStore_BlazorApp.Server.Helpers
             if (databaseType == DatabaseType.InMemory)
             {
                 services.AddDbContext<MusicalShopIdentityDbContext>(
-                    options => options.UseInMemoryDatabase("random_name"));
+                    options => options
+                     .UseLazyLoadingProxies()
+                     .UseInMemoryDatabase("random_name"));
             }
             if (databaseType == DatabaseType.SQLSERVER)
             {

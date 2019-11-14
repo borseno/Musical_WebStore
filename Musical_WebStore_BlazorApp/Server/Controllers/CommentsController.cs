@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Musical_WebStore_BlazorApp.Server.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Components.Authorization;
+using AutoMapper;
 
 namespace Musical_WebStore_BlazorApp.Server.Controllers
 {
@@ -20,10 +21,12 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
     {
         private readonly MusicalShopIdentityDbContext ctx;
         private readonly UserManager<User> _userManager;
-        public CommentsController(MusicalShopIdentityDbContext ctx, UserManager<User> userManager)
+        private readonly IMapper _mapper;
+        public CommentsController(MusicalShopIdentityDbContext ctx, UserManager<User> userManager, IMapper mapper)
         {
             this.ctx = ctx;
             _userManager = userManager;
+            _mapper = mapper;
         }
 
         private Task<Comment[]> GetCommentsAsync() => ctx.Comments.ToArrayAsync();
@@ -39,13 +42,14 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
         public async Task<IActionResult> LeaveCommentSample(CommentModel model)
         {            
             var user = await _userManager.FindByEmailAsync(model.AuthorId);
+            var userLimited = _mapper.Map<UserLimited>(user);
             ctx.Comments.Add(
                 new Comment()
                 {
-                    AuthorId = user.Id,
                     InstrumentId = model.InstrumentId,
                     Text = model.Text,
-                    Date = DateTime.Now
+                    Date = DateTime.Now,
+                    User = userLimited
                 }
             );
             await ctx.SaveChangesAsync();

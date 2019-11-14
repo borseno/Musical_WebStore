@@ -40,14 +40,22 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
         {            
             
             var user = await _userManager.FindByEmailAsync(model.AuthorId);
-            ctx.Stars.Add(
-                new Star()
-                {
-                    AuthorId = user.Id,
-                    InstrumentId = model.InstrumentId,
-                    Mark = model.Mark
-                }
-            );
+            var str = ctx.Stars.SingleOrDefault(s => s.AuthorId == user.Id && s.InstrumentId == model.InstrumentId);
+            if(str != null)
+            {
+                str.Mark = model.Mark;
+            }
+            else
+            {
+                ctx.Stars.Add(
+                    new Star()
+                    {
+                        AuthorId = user.Id,
+                        InstrumentId = model.InstrumentId,
+                        Mark = model.Mark
+                    }
+                );
+            }
             await ctx.SaveChangesAsync();
             return Ok(new StarResult(){Successful = true});
         }

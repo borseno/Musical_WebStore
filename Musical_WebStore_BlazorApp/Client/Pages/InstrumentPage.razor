@@ -15,7 +15,7 @@ else
 {
     <div style="display:flex; flex-direction: row">
         <div style="width: 200px">
-            <img class="card-img-top" src="guitar.jpg" alt="Card image cap">
+            <img href=# class="card-img-top pt-2" src="@instrument.Image" alt="Card image cap" style="height: 400px; width: auto;">
         </div>
         <div>
             <h1>@instrument.Title</h1>
@@ -34,7 +34,7 @@ else
     <div>
     @foreach(var l in list)
     {
-        <label id="@l" @onclick="@(() => LeaveStar(l))">@starsSymbols[l]</label>
+        <label id="@l" @onclick="@(() => LeaveStar(l + 1))">@starsSymbols[l]</label>
     }
     </div>
 
@@ -68,7 +68,7 @@ else
                 </a>
             </div>
             <div class="media-body">
-                <h4 class="media-heading">@com.AuthorId</h4>
+                <h4 class="media-heading">@com.User.UserId</h4>
                <AuthorizeView>
                     <Authorized>
                         @if (context.User.IsInRole("Admin") || com.Id == -1)
