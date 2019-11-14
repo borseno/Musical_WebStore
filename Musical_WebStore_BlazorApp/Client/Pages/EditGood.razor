@@ -88,6 +88,7 @@
         EditGoodModel.Quantity = instrument.Quantity;
         EditGoodModel.Title = instrument.Title;
         EditGoodModel.TypeName = instrument.TypeName;
+        EditGoodModel.ImageSrc = instrument.Image;
 
         this.StateHasChanged();
     }
@@ -115,9 +116,6 @@
 
     private async Task HandleEditing()
     {
-        if (EditGoodModel.ImageType == null || EditGoodModel.ImageBytes == null)
-            return;
-
         if (!ValidateType(EditGoodModel.TypeName))
             return;
 

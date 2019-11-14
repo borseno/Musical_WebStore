@@ -51,6 +51,7 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
         {
             Instrument instrument = await GetReadyToAddInstrument(model);
             instrument.Id = model.Id;
+            instrument.Image ??= model.ImageSrc;
 
             var entity = await ctx.FindAsync<Instrument>(instrument.Id);
 
@@ -83,9 +84,9 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
         }
 
         private async Task<Instrument> GetReadyToAddInstrument(AddGoodModel model)
-        {
-            var localFilePath = await fileSavingService.SaveFileAsync(model.ImageBytes, model.ImageType, "images");
-
+        {        
+            var localFilePath = await SaveAndGetLocalFilePathIfNewerPhoto(model);
+            
             var instrument = new Instrument
             {
                 Description = model.Description,
@@ -97,6 +98,18 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
             };
 
             return instrument;
+        }
+
+        private async Task<string> SaveAndGetLocalFilePathIfNewerPhoto(AddGoodModel model)
+        {
+            bool ValidateImage(AddGoodModel model) => model.ImageBytes != null && model.ImageType != null;
+
+            var localFilePath =
+                ValidateImage(model)
+                ? await fileSavingService.SaveFileAsync(model.ImageBytes, model.ImageType, "images")
+                : null;
+
+            return localFilePath;
         }
     }
 }
