@@ -13,19 +13,35 @@
 }
 else
 {
-    <div style="display:flex; flex-direction: row">
-        <div style="width: 200px">
-            <img href=# class="card-img-top pt-2" src="@instrument.Image" alt="Card image cap" style="height: 400px; width: auto;">
-        </div>
-        <div>
-            <h1>@instrument.Title</h1>
-            <h1>@instrument.Price</h1>
-            <h1>@instrument.Quantity</h1>
-            <h1>@instrument.Description</h1>
-            <h1>@instrument.TypeName</h1>
-            
+<div class="row m-3">
+    <div class="col-md-4">
+        <div class="card">
+
+            <div class="card-header">
+                <h1>@instrument.Title</h1>
+            </div>
+
+            <div class="card-body text-center">
+                <img class="card-img-top" src="@instrument.Image" alt="Card image cap" style="width: 100%">
+            </div>
         </div>
     </div>
+    <div class="col-md-4">
+        <div class="alert alert-info" role="alert">
+            <h1>Price: $@instrument.Price</h1>
+        </div>
+        <div class="alert alert-warning" role="alert">
+            <h3>Quantity: @instrument.Quantity</h3>
+        </div>
+        <div class="alert alert-primary" role="alert">
+            <h4>Type: @instrument.TypeName</h4>
+        </div>
+        <div class="alert alert-secondary" role="alert">
+            <h4>@instrument.Description</h4>
+        </div>
+    </div>
+</div>
+    
 
 
 @code{ 

@@ -27,20 +27,20 @@ else
             <div class="col-6 col-sm-3 p-2" style="min-width: 18rem; max-width: 30.5%;">
                 <div class="card text-center">
                     <a href='instrument/@instrument.Id'>
-                        <img href=# class="card-img-top pt-2" src="@instrument.Image" alt="Card image cap" style="height: 300px; width: 100%;">
+                        <img href=# class="card-img-top pt-2" src="@instrument.Image" alt="Card image cap" style="height: 400px; width: 90%;">
                     </a>
                     <div class="card-body">
                         <h5 class="card-title">@instrument.Title</h5>
                         <h5 class="card-text">Price: $@instrument.Price</h5>
                         <p class="card-text">@instrument.Description</p>
                         <p class="card-text">TYPE: @instrument.TypeName</p>
-                        <a href="#" class="btn btn-primary">Add to Cart</a>
+                        <a href="#" class="btn btn-primary m-1">Add to Cart</a>
                         <AuthorizeView>
                             <Authorized>
                                 @if (context.User.IsInRole("Admin"))
                                 {
-                                    <button class="btn btn-primary" @onclick="@(() => DeleteGood(@instrument.Id))">Delete</button>
-                                    <a href="goodsmanagement/editGood/@instrument.Id" class="btn btn-primary">Edit</a>
+                                    <button class="btn btn-primary m-1" @onclick="@(() => DeleteGood(@instrument.Id))">Delete</button>
+                                    <a href="goodsmanagement/editGood/@instrument.Id" class="btn btn-primary m-1">Edit</a>
                                 }
                             </Authorized>
                         </AuthorizeView>
