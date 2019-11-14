@@ -1,8 +1,9 @@
 ﻿@page "/goodsmanagement/editGood/{Id:int}"
 @using Musical_WebStore_BlazorApp.Shared
 @using System.IO
-@using Microsoft.AspNetCore.Blazor
 @using BlazorInputFile
+@using Microsoft.AspNetCore.Blazor.Services
+@inject NavigationManager navManager
 @inject HttpClient client
 
 <div class="card">
@@ -69,11 +70,17 @@
     private EditGoodModel EditGoodModel = new EditGoodModel();
     private bool IsSending = false;
 
+    private static bool ValidateType(string type) => ! String.IsNullOrWhiteSpace(type);
     private static bool ValidateFile(IFileListEntry file) => file.Type.StartsWith(HtmlImageIdentifier);
 
     protected override async Task OnInitializedAsync()
     {
         var instrument = await client.GetJsonAsync<Instrument>($"api/GoodsManagement/GetGood/{Id}");
+
+        if (instrument == null)
+        {
+            navManager.NavigateTo("/goodsmanagement/addGood");
+        }
 
         EditGoodModel.Id = instrument.Id;
         EditGoodModel.Description = instrument.Description;
@@ -81,6 +88,7 @@
         EditGoodModel.Quantity = instrument.Quantity;
         EditGoodModel.Title = instrument.Title;
         EditGoodModel.TypeName = instrument.TypeName;
+        EditGoodModel.ImageSrc = instrument.Image;
 
         this.StateHasChanged();
     }
@@ -108,8 +116,8 @@
 
     private async Task HandleEditing()
     {
-        if (EditGoodModel.ImageType == null || EditGoodModel.ImageBytes == null)
-            return ;
+        if (!ValidateType(EditGoodModel.TypeName))
+            return;
 
         IsSending = true;
         await client.PostJsonAsync("api/goodsmanagement/editGood", EditGoodModel);
