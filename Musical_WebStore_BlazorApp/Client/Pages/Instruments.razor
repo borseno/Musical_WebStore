@@ -62,7 +62,7 @@ else
     {
         var obj = new DeleteGoodModel { Id = id };
 
-        await client.PostJsonAsync("api/Goodmanagement/deletegood", obj);
+        await client.PostJsonAsync("api/Goodsmanagement/deletegood", obj);
     }
     protected override void OnParametersSet()
     {
