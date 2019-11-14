@@ -52,7 +52,7 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
                     User = userLimited
                 }
             );
-            await ctx.SaveChangesAsync();
+            ctx.SaveChangesAsync();
             return Ok(new LeaveCommentResult(){Successful = true});
         }
 

@@ -68,10 +68,10 @@ else
                 </a>
             </div>
             <div class="media-body">
-                <h4 class="media-heading">@com.User.UserId</h4>
+                <h4 class="media-heading">@com.User.Email</h4>
                <AuthorizeView>
                     <Authorized>
-                        @if (context.User.IsInRole("Admin") || com.Id == -1)
+                        @if (context.User.IsInRole("Admin") || com.User.Email == user.Identity.Name)
                         {
                             <button @onclick="@(() => DeleteComment(com.Id))">Delete</button>
                         }
