@@ -1,8 +1,9 @@
 ﻿@page "/goodsmanagement/editGood/{Id:int}"
 @using Musical_WebStore_BlazorApp.Shared
 @using System.IO
-@using Microsoft.AspNetCore.Blazor
 @using BlazorInputFile
+@using Microsoft.AspNetCore.Blazor.Services
+@inject NavigationManager navManager
 @inject HttpClient client
 
 <div class="card">
@@ -75,6 +76,11 @@
     {
         var instrument = await client.GetJsonAsync<Instrument>($"api/GoodsManagement/GetGood/{Id}");
 
+        if (instrument == null)
+        {
+            navManager.NavigateTo("/goodsmanagement/addGood");
+        }
+
         EditGoodModel.Id = instrument.Id;
         EditGoodModel.Description = instrument.Description;
         EditGoodModel.Price = instrument.Price;
@@ -109,7 +115,7 @@
     private async Task HandleEditing()
     {
         if (EditGoodModel.ImageType == null || EditGoodModel.ImageBytes == null)
-            return ;
+            return;
 
         IsSending = true;
         await client.PostJsonAsync("api/goodsmanagement/editGood", EditGoodModel);
