@@ -328,4 +328,4 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
-/Musical_WebStore_BlazorApp/Server/wwwroot/images
+#/Musical_WebStore_BlazorApp/Server/wwwroot/images

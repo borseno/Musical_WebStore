@@ -109,7 +109,7 @@
     private async Task HandleEditing()
     {
         if (EditGoodModel.ImageType == null || EditGoodModel.ImageBytes == null)
-            return;
+            return ;
 
         IsSending = true;
         await client.PostJsonAsync("api/goodsmanagement/editGood", EditGoodModel);
