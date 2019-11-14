@@ -21,13 +21,13 @@ else
         </Authorized>
     </AuthorizeView>
 
-    <div class="row">
+    <div class="card-deck">
         @foreach (var instrument in instruments)
         {
-            <div class="col-6 col-sm-3 p-2">
+            <div class="col-6 col-sm-3 p-2" style="min-width: 18rem; max-width: 30.5%;">
                 <div class="card text-center">
                     <a href='instrument/@instrument.Id'>
-                        <img href=# class="card-img-top pt-2" src="@instrument.Image" alt="Card image cap" style="height: 400px; width: auto;">
+                        <img href=# class="card-img-top pt-2" src="@instrument.Image" alt="Card image cap" style="height: 300px; width: 100%;">
                     </a>
                     <div class="card-body">
                         <h5 class="card-title">@instrument.Title</h5>
@@ -62,7 +62,7 @@ else
     {
         var obj = new DeleteGoodModel { Id = id };
 
-        await client.PostJsonAsync("api/Goodmanagement/deletegood", obj);
+        await client.PostJsonAsync("api/Goodsmanagement/deletegood", obj);
     }
     protected override void OnParametersSet()
     {
