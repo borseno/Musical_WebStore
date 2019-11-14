@@ -44,7 +44,7 @@ namespace Musical_WebStore_BlazorApp.Server.Services
             var localFilePath = GetLocalFilePath(fileType, subpath);
             var path = Path.Combine(wwwroot, localFilePath);
 
-            using (var sw = new FileStream(path, FileMode.Create))
+            using (var sw = File.Create(path, bytes.Length, FileOptions.Asynchronous))
             {
                 await sw.WriteAsync(bytes);
             }
