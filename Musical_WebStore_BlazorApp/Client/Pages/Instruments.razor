@@ -63,6 +63,13 @@ else
         var obj = new DeleteGoodModel { Id = id };
 
         await client.PostJsonAsync("api/Goodsmanagement/deletegood", obj);
+
+        var item = all_instruments.First(i => i.Id == id);
+
+        all_instruments.Remove(item);
+        instruments.Remove(item);
+
+        this.StateHasChanged();
     }
     protected override void OnParametersSet()
     {
