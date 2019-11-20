@@ -30,10 +30,20 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
         }
 
         private Task<Comment[]> GetCommentsAsync() => ctx.Comments.ToArrayAsync();
+        
+        private async Task<CommentLimited[]> GetCommentsLimitedAsync()
+        {   
+            var comments = await ctx.Comments.Select(c => _mapper.Map<CommentLimited>(c)).ToArrayAsync();
+            foreach(var com in comments)
+            {
+                com.User = _mapper.Map<UserLimited>(com.User);
+            }
+            return comments;
+        } 
         [HttpGet]
-        public async Task<IEnumerable<Comment>> Get()
+        public async Task<IEnumerable<CommentLimited>> Get()
         {
-            var comments = await GetCommentsAsync();
+            var comments = await GetCommentsLimitedAsync();
 
             return comments;
         }
@@ -42,17 +52,17 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
         public async Task<IActionResult> LeaveCommentSample(CommentModel model)
         {            
             var user = await _userManager.FindByEmailAsync(model.AuthorId);
-            var userLimited = _mapper.Map<UserLimited>(user);
+            
             ctx.Comments.Add(
                 new Comment()
                 {
                     InstrumentId = model.InstrumentId,
                     Text = model.Text,
                     Date = DateTime.Now,
-                    User = userLimited
+                    User = user
                 }
             );
-            ctx.SaveChangesAsync();
+            await ctx.SaveChangesAsync();
             return Ok(new LeaveCommentResult(){Successful = true});
         }
 

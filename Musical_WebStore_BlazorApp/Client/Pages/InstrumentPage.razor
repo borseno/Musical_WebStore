@@ -105,7 +105,7 @@ else
 @code {
     List<Instrument> instruments;
     Instrument instrument;
-    List<Comment> comments;
+    List<CommentLimited> comments;
     List<Star> stars;
     int mark;
     System.Security.Claims.ClaimsPrincipal user;
@@ -117,7 +117,7 @@ else
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         user = authState.User;
-        comments = await Http.GetJsonAsync<List<Comment>>("api/Comments");
+        comments = await Http.GetJsonAsync<List<CommentLimited>>("api/Comments");
         comments = comments.Where(c => c.InstrumentId == int.Parse(Index)).ToList();
         instruments = await Http.GetJsonAsync<List<Instrument>>("api/Instruments");
         instrument = instruments.Single(i => i.Id == int.Parse(Index));

@@ -6,6 +6,7 @@ using Musical_WebStore_BlazorApp.Shared;
 public class MappingProfile : Profile {
     public MappingProfile() {
         CreateMap<User, UserLimited>();
+        CreateMap<Comment, CommentLimited>();
         
     }
 }
