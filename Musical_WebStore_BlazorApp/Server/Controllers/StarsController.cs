@@ -11,6 +11,8 @@ using Microsoft.EntityFrameworkCore;
 using Musical_WebStore_BlazorApp.Server.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Components.Authorization;
+using AutoMapper.QueryableExtensions;
+using AutoMapper;
 
 namespace Musical_WebStore_BlazorApp.Server.Controllers
 {
@@ -20,28 +22,32 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
     {
         private readonly MusicalShopIdentityDbContext ctx;
         private readonly UserManager<User> _userManager;
-        public StarsController(MusicalShopIdentityDbContext ctx, UserManager<User> userManager)
+        private readonly IMapper mapper;
+
+        public StarsController(MusicalShopIdentityDbContext ctx, UserManager<User> userManager, IMapper mapper)
         {
             this.ctx = ctx;
             _userManager = userManager;
+            this.mapper = mapper;
         }
-
-        private Task<Star[]> GetStarsAsync() => ctx.Stars.ToArrayAsync();
+        
         [HttpGet]
-        public async Task<IEnumerable<Star>> Get()
+        public async Task<IEnumerable<StarDTO>> Get()
         {
-            var stars = await GetStarsAsync();
-
+            var stars = await ctx.Stars
+                .AsNoTracking()
+                .ProjectTo<StarDTO>(mapper.ConfigurationProvider)
+                .ToArrayAsync();
+            
             return stars;
         }
 
         [Route("addstar")]
         public async Task<IActionResult> LeaveStar(StarModel model)
-        {            
-            
+        {
             var user = await _userManager.FindByEmailAsync(model.AuthorId);
             var str = ctx.Stars.SingleOrDefault(s => s.AuthorId == user.Id && s.InstrumentId == model.InstrumentId);
-            if(str != null)
+            if (str != null)
             {
                 str.Mark = model.Mark;
             }
@@ -57,18 +63,38 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
                 );
             }
             await ctx.SaveChangesAsync();
-            return Ok(new StarResult(){Successful = true});
+            return Ok(new StarResult() { Successful = true });
         }
 
         [Route("deletestar")]
         public async Task<IActionResult> DeleteStar(DeleteStarModel model)
-        {            
-            
-            ctx.Stars.Remove(
-                ctx.Stars.Single(c => c.Id == model.StarId)
-            );
+        {
+            // get star info
+
+            var star = await ctx.Stars.FindAsync(new { model.InstrumentId, model.AuthorId });
+
+            // get current user
+
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            // authorize user
+
+            if (currentUser == null || currentUser.Id != model.AuthorId)
+            {
+                return Ok(new DeleteStarResult()
+                {
+                    Successful = false,
+                    Error = "you're not authorized to delete this star"
+                });
+            }
+
+            // do the job if authorized
+
+            ctx.Stars.Remove(star);
+
             await ctx.SaveChangesAsync();
-            return Ok(new DeleteStarResult(){Successful = true});
+
+            return Ok(new DeleteStarResult() { Successful = true });
         }
     }
 }
