@@ -7,6 +7,6 @@ public class MappingProfile : Profile {
     public MappingProfile() {
         CreateMap<User, UserLimited>();
         CreateMap<Comment, CommentLimited>();
-        
+        CreateMap<Star, StarDTO>();
     }
 }

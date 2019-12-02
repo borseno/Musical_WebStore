@@ -18,18 +18,46 @@ namespace Musical_WebStore_BlazorApp.Server.Data
         public DbSet<Instrument> Instruments { get; set; }
         public DbSet<Comment> Comments {get;set;}
         public DbSet<Star> Stars {get;set;}
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder blder)
         {
-            builder.Entity<Guitar>()
+            blder.Entity<Star>()
+                .HasKey(i => new { i.InstrumentId, i.AuthorId })
+                ;            
+            blder.Entity<Star>()
+                .HasOne(i => i.Author)
+                .WithMany()
+                .HasForeignKey(i => i.AuthorId)
+                ;          
+            blder.Entity<Star>()
+                .HasOne(i => i.Instrument)
+                .WithMany()
+                .HasForeignKey(i => i.InstrumentId)
+                ;
+
+            blder.Entity<Comment>()
+                .HasKey(i => i.Id)
+                ;
+            blder.Entity<Comment>()
+                .HasOne(i => i.User)
+                .WithMany()
+                .HasForeignKey(i => i.UserId)
+                ;
+            blder.Entity<Comment>()
+                .HasOne(i => i.Instrument)
+                .WithMany()
+                .HasForeignKey(i => i.InstrumentId)
+                ;
+
+            blder.Entity<Guitar>()
                 .HasBaseType<Instrument>();
 
-            builder.Entity<Pedal>()
+            blder.Entity<Pedal>()
                 .HasBaseType<Instrument>();
 
-            builder.Entity<Amplifier>()
+            blder.Entity<Amplifier>()
                 .HasBaseType<Instrument>();
 
-            builder.Entity<Instrument>()
+            blder.Entity<Instrument>()
                 .HasDiscriminator<string>("TypeName")
             .HasValue<Instrument>(nameof(Instrument))
             .HasValue<Amplifier>(nameof(Amplifier))
@@ -37,9 +65,9 @@ namespace Musical_WebStore_BlazorApp.Server.Data
             .HasValue<Pedal>(nameof(Pedal))
             ;
 
-            builder.Seed();
+            blder.Seed();
 
-            base.OnModelCreating(builder);
+            base.OnModelCreating(blder);
         }
     }
 
