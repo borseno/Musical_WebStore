@@ -1,0 +1,58 @@
+﻿@page "/cart"
+@using Musical_WebStore_BlazorApp.Shared
+@using Microsoft.AspNetCore.Blazor
+@using System.IO;
+@inject HttpClient client
+<h3 class="inst-title">Instruments</h3>
+
+@if (cartItems == null)
+{
+    <p><em>Loading instruments...</em></p>
+}
+else
+{
+
+    <div class="card-deck">
+        @foreach (var item in cartItems)
+        {
+            <div class="col-6 col-sm-3 p-2" style="min-width: 18rem; max-width: 30.5%;">
+                <div class="card text-center">
+                    <a href='instrument/@item.Id'>
+                        <img href=# class="card-img-top pt-2" src="@item.Image" alt="Card image cap" style="height: 400px; width: 90%;">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Title</h5>
+                        <h5 class="card-text">Price: $@item.Price</h5>
+                        <p class="card-text">@item.Description</p>
+                        <p class="card-text">TYPE: @item.TypeName</p>
+                        <button @onclick="@(() => DeleteItem(@item.Id))" class="btn btn-primary">Remove from cart</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <a href="purchase"><button>Purchase</button></a>
+}
+
+@code {
+    List<Instrument> all_instruments = null;
+
+    List<Instrument> cartItems = null;
+
+
+
+    private async Task DeleteItem(int id)
+    {
+        var model = new DeleteItemFromCartModel { InstrumentId = id };
+
+        await client.PostJsonAsync("api/cart/deletefromcart", model);
+        await OnInitializedAsync();
+        this.StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        cartItems = await client.GetJsonAsync<List<Instrument>>("api/cart/");
+    }
+    
+}

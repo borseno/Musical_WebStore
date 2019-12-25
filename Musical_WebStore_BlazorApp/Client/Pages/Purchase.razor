@@ -1,0 +1,37 @@
+@page "/purchase"
+@using Musical_WebStore_BlazorApp.Shared
+@using Microsoft.AspNetCore.Blazor
+@using System.IO;
+@inject HttpClient client
+
+<EditForm Model="@model" OnValidSubmit="MakePurchase">
+<label>Enter your card number: </label>
+<InputText class="form-control" @bind-Value="model.CardNumber"/>
+<label>Enter your card CVV: </label>
+<InputText class="form-control" @bind-Value="model.CVV"/>
+<InputSelect class="form-control" @bind-Value="model.Year">
+@for(int x = 2019; x < 2050; x++)
+{
+<option value="@x.ToString()">@x</option>
+}
+</InputSelect>
+
+<InputSelect class="form-control" @bind-Value="model.Month">
+@for(int x = 1; x < 13; x++)
+{
+<option value="@x.ToString()">@x</option>
+}
+</InputSelect>
+<button class="btn btn-primary">Submit</button>
+
+</EditForm>
+@code
+{
+    public PurchaseModel model = new PurchaseModel();
+    
+    public async Task MakePurchase()
+    {
+        Console.WriteLine("Fuck you!");
+        await client.PostJsonAsync<Result>("api/cart/purchase", model);
+    }
+}
