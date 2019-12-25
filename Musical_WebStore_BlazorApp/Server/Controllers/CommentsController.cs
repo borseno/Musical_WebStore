@@ -2,15 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Musical_WebStore_BlazorApp.Shared;
-using Musical_WebStore_BlazorApp.Client;
 using Musical_WebStore_BlazorApp.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Musical_WebStore_BlazorApp.Server.Data.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Components.Authorization;
 using AutoMapper;
 
 namespace Musical_WebStore_BlazorApp.Server.Controllers
@@ -47,7 +44,7 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
 
             return comments;
         }
-
+        [HttpPost]
         [Route("addcomment")]
         public async Task<IActionResult> LeaveCommentSample(CommentModel model)
         {            

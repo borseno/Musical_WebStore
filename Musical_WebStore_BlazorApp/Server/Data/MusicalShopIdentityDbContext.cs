@@ -18,8 +18,11 @@ namespace Musical_WebStore_BlazorApp.Server.Data
         public DbSet<Instrument> Instruments { get; set; }
         public DbSet<Comment> Comments {get;set;}
         public DbSet<Star> Stars {get;set;}
+        public DbSet<CartItem> CartItems {get;set;}
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<CartItem>().HasKey(item => new {item.InstrumentId, item.UserId});
+            builder.Entity<CartItem>().HasOne(ci => ci.User).WithMany(u => u.CartItems).HasForeignKey(ci => ci.UserId);
             builder.Entity<Guitar>()
                 .HasBaseType<Instrument>();
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Musical_WebStore_BlazorApp.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,6 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Models
 {
     public class User : IdentityUser
     {
-        // add other custom properties for the user model here...
+        public virtual IEnumerable<CartItem> CartItems {get;set;}
     }
 }
