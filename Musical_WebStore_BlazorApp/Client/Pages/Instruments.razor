@@ -34,9 +34,11 @@ else
                         <h5 class="card-text">Price: $@instrument.Price</h5>
                         <p class="card-text">@instrument.Description</p>
                         <p class="card-text">TYPE: @instrument.TypeName</p>
-                        <a href="#" class="btn btn-primary m-1">Add to Cart</a>
                         <AuthorizeView>
                             <Authorized>
+                                <a href="#" class="btn btn-primary m-1">Add to Cart</a>
+                                <a href="testinstrument/@instrument.Id" class="btn btn-primary m-1">Enroll for testing</a>
+
                                 @if (context.User.IsInRole("Admin"))
                                 {
                                     <button class="btn btn-primary m-1" @onclick="@(() => DeleteGood(@instrument.Id))">Delete</button>
