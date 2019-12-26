@@ -1,37 +1,44 @@
+
 @page "/purchase"
+@inject Microsoft.AspNetCore.Components.NavigationManager uriHelper
 @using Musical_WebStore_BlazorApp.Shared
 @using Microsoft.AspNetCore.Blazor
 @using System.IO;
 @inject HttpClient client
 
 <EditForm Model="@model" OnValidSubmit="MakePurchase">
-<label>Enter your card number: </label>
-<InputText class="form-control" @bind-Value="model.CardNumber"/>
-<label>Enter your card CVV: </label>
-<InputText class="form-control" @bind-Value="model.CVV"/>
-<InputSelect class="form-control" @bind-Value="model.Year">
-@for(int x = 2019; x < 2050; x++)
-{
-<option value="@x.ToString()">@x</option>
-}
-</InputSelect>
+<DataAnnotationsValidator />
+<ValidationSummary />
+<label>Enter your phone: </label>
+<InputText type="tel" class="form-control" @bind-Value="model.Phone"/>
+<ValidationMessage For="@(() => model.Phone)" />
+<label>Select spot the items to be delivered: </label>
 
-<InputSelect class="form-control" @bind-Value="model.Month">
-@for(int x = 1; x < 13; x++)
+<InputSelect class="form-control" @bind-Value="model.LocationId">
+
+<option>Select spot to deliver...</option>
+@if(locations != null)
+@foreach(var loc in locations)
 {
-<option value="@x.ToString()">@x</option>
+    <option value="@loc.Id">@loc.Name (@loc.Address)</option>
 }
 </InputSelect>
+<ValidationMessage For="@(() => model.LocationId)" />
+
 <button class="btn btn-primary">Submit</button>
 
 </EditForm>
 @code
 {
+    LocationModel[] locations = null;
     public PurchaseModel model = new PurchaseModel();
-    
+    protected override async Task OnInitializedAsync()
+    {
+        locations = await client.GetJsonAsync<LocationModel[]>("api/management/getlocations");
+    }
     public async Task MakePurchase()
     {
-        Console.WriteLine("Fuck you!");
         await client.PostJsonAsync<Result>("api/cart/purchase", model);
+        uriHelper.NavigateTo("orders");
     }
 }

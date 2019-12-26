@@ -1,0 +1,83 @@
+﻿@page "/orders"
+@using Musical_WebStore_BlazorApp.Shared
+@using Microsoft.AspNetCore.Blazor
+@using System.IO;
+@inject HttpClient client
+<h3 class="inst-title">Instruments</h3>
+
+@if (orders == null)
+{
+    <p><em>Loading orders...</em></p>
+}
+else
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <td>
+                    Date
+                </td>
+                <td>
+                    Status
+                </td>
+                <td>
+                    Items
+                </td>
+                <td>
+                    Delivering to
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var order in orders)
+            {
+                <tr>
+                    <td>
+                        @order.Date
+                    </td>
+                    <td>
+                        @{
+                            switch(@order.StatusId)
+                            {
+                                case (int)OrderStatuses.InConfirmation:
+                                    <text>In confirmation</text>
+                                    break;
+                                case (int)OrderStatuses.Confirmed:
+                                    <text>Confirmed</text>
+                                    break;
+                                case (int)OrderStatuses.OnTheWay:
+                                    <text>On The Way</text>
+                                    break;
+                                case (int)OrderStatuses.Delivered:
+                                    <text>Waiting for you</text>
+                                    break;
+                            }
+                        }
+                    </td>
+                    <td>
+                        @foreach(var item in order.Items)
+                        {
+                            <div>
+                                <a href="instrument/@item.Instrument.Id">@item.Instrument.Title</a> (@item.Num шт)
+                            </div>
+                        }
+                    </td>
+                    <td>
+                        @order.Location.Name
+                        (@order.Location.Address)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    public OrderViewModel[] orders = null;
+    protected override async Task OnInitializedAsync()
+    {
+        orders = await client.GetJsonAsync<OrderViewModel[]>("api/cart/getorders");
+    }
+    
+}

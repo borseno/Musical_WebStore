@@ -2,6 +2,7 @@
 @using Musical_WebStore_BlazorApp.Shared
 @using Microsoft.AspNetCore.Blazor
 @using System.IO;
+@using System.Linq;
 @inject HttpClient client
 <h3 class="inst-title">Instruments</h3>
 
@@ -11,35 +12,46 @@
 }
 else
 {
-
+    @if(cartItems.Count() != 0)
+    {
+    <text>Items were successfully added!</text>
+    <text>If you are not done, you can</text><a href="list"> continue shopping.</a>
+    <div>
+        <a href="purchase"><button class="btn btn-primary">Make Purchase</button></a>
+    </div>
+    }
+    else
+    {
+        <text>There are no items in your cart.</text>
+        <a href="list">Go shopping now!</a>
+    }
     <div class="card-deck">
         @foreach (var item in cartItems)
         {
             <div class="col-6 col-sm-3 p-2" style="min-width: 18rem; max-width: 30.5%;">
                 <div class="card text-center">
-                    <a href='instrument/@item.Id'>
-                        <img href=# class="card-img-top pt-2" src="@item.Image" alt="Card image cap" style="height: 400px; width: 90%;">
+                    <a href='instrument/@item.Instrument.Id'>
+                        <img href=# class="card-img-top pt-2" src="@item.Instrument.Image" alt="Card image cap" style="height: 400px; width: 90%;">
                     </a>
                     <div class="card-body">
-                        <h5 class="card-title">@item.Title</h5>
-                        <h5 class="card-text">Price: $@item.Price</h5>
-                        <p class="card-text">@item.Description</p>
-                        <p class="card-text">TYPE: @item.TypeName</p>
-                        <button @onclick="@(() => DeleteItem(@item.Id))" class="btn btn-primary">Remove from cart</button>
+                        <h5 class="card-title">@item.Instrument.Title</h5>
+                        <h5 class="card-text">Price: $@item.Instrument.Price</h5>
+                        <p class="card-text">@item.Instrument.Description</p>
+                        <p class="card-text">TYPE: @item.Instrument.TypeName</p>
+                        <p class="card-text">Number: @item.Num</p>
+                        <button @onclick="@(() => DeleteItem(@item.Instrument.Id))" class="btn btn-primary">Remove from cart</button>
                     </div>
                 </div>
             </div>
         }
     </div>
-    <a href="purchase"><button>Purchase</button></a>
+    
 }
 
 @code {
     List<Instrument> all_instruments = null;
 
-    List<Instrument> cartItems = null;
-
-
+    CartItemModel[] cartItems = null;
 
     private async Task DeleteItem(int id)
     {
@@ -52,7 +64,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        cartItems = await client.GetJsonAsync<List<Instrument>>("api/cart/");
+        cartItems = await client.GetJsonAsync<CartItemModel[]>("api/cart/");
     }
     
 }
