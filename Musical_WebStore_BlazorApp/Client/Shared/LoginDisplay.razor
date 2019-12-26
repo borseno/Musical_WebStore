@@ -1,7 +1,12 @@
 ﻿<AuthorizeView>
     <Authorized>
         Hello, @context.User.Identity.Name!
-        <a href="LogOut">Log out</a>
+        <NavLink class="nav-link" href="/profile">
+            <span class="oi oi-list-rich" aria-hidden="true"></span> Profile
+        </NavLink>
+        <NavLink class="nav-link" href="/logout">
+            <span class="oi oi-list-rich" aria-hidden="true"></span> Logout
+        </NavLink>
     </Authorized>
     <NotAuthorized>
         <a href="Register">Register</a> &nbsp; <a href="Login">Log in</a>
