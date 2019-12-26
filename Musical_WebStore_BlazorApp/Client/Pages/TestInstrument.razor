@@ -1,0 +1,88 @@
+﻿@page "/testInstrument/{id}"
+@inject ITestEnrollService service
+
+<h3 class="inst-title">Enroll for instrument testing</h3>
+
+@if (ShowErrors)
+{
+    <div class="alert alert-danger" role="alert">
+        @foreach (var error in _errors)
+        {
+            <p>@error</p>
+        }
+    </div>
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Enter information to enroll for testing</h5>
+        <EditForm Model="@_testEnrollingModel" OnValidSubmit="@HandleEnrollee">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="form-group">
+                <label>Date of testing</label>
+                <InputDate id="date" class="form-control" @bind-Value="_testEnrollingModel.DateTime" />
+            </div>
+            <div class="form-group">
+                <label>Additional info</label>
+                <InputTextArea id="comment" class="form-control" @bind-Value="_testEnrollingModel.Comment" />
+            </div>
+            <button type="submit" class="btn btn-primary">Enroll</button>
+        </EditForm>
+
+        <br />
+
+        <div class="alert-info">
+            @if (_retrievingResponse)
+            {
+                <p class="text-info">Enrolling...</p>
+            }
+            @if (_enrolled)
+            {
+                <p class="text-info">You have succesfully enrolled to a test.</p>
+                <p class="text-info">You can find info about test at <NavLink href="@($"TestingInfo/{_testId}")">this link</NavLink></p>
+            }
+        </div>
+
+    </div>
+</div>
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    private IEnumerable<string> _errors;
+    private bool _enrolled;
+    private int _testId;
+    private bool _retrievingResponse;
+
+    private TestEnrollingModel _testEnrollingModel = new TestEnrollingModel
+    {
+        DateTime = DateTime.Now
+    };
+
+    private bool ShowErrors => _errors != null;
+
+    private async Task HandleEnrollee()
+    {
+        _errors = null;
+
+        _testEnrollingModel.GoodId = Int32.Parse(Id);
+
+        var request = service.Enroll(_testEnrollingModel);
+
+        _retrievingResponse = true;
+
+        var result = await request;
+
+        _retrievingResponse = false;
+
+        _errors = result.Errors;
+
+        if (_errors == null)
+        {
+            _enrolled = true;
+            _testId = result.TestId;
+        }
+    }
+}

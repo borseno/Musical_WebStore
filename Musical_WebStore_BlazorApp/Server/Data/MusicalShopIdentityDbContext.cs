@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Musical_WebStore_BlazorApp.Server.Data.Models;
 using Musical_WebStore_BlazorApp.Shared;
+using Musical_WebStore_BlazorApp.Shared.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +19,14 @@ namespace Musical_WebStore_BlazorApp.Server.Data
         public DbSet<Instrument> Instruments { get; set; }
         public DbSet<Comment> Comments {get;set;}
         public DbSet<Star> Stars {get;set;}
+        public DbSet<Testing> Testings { get; set; }
+
         protected override void OnModelCreating(ModelBuilder blder)
         {
+            blder.Entity<Testing>()
+                .Property(i => i.UserId)
+                .IsRequired(true);
+
             blder.Entity<Star>()
                 .HasKey(i => new { i.InstrumentId, i.AuthorId })
                 ;            
