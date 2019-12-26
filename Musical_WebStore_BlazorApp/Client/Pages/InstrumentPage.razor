@@ -44,7 +44,7 @@ else
         <EditForm Model="@model" OnValidSubmit="AddToCart">
             <DataAnnotationsValidator />
             <ValidationSummary />
-            <InputSelect class="form-control" @bind-Value="model.Num">
+            <InputSelect class="form-control m-1" @bind-Value="model.Num">
                 <option>Select number you want to order...</option>
                 @for(int x = 1; x < 10; x++)
                 {   
@@ -52,7 +52,7 @@ else
                 }
             </InputSelect>
             <ValidationMessage For="@(() => model.Num)" />
-            <button class="btn btn-primary" type="submit">Add to cart</button>
+            <button class="btn btn-primary m-1" type="submit">Add to cart</button>
         </EditForm>
     </div>
 

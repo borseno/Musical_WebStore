@@ -28,7 +28,12 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
         public async Task<CartItemModel[]> Get()
         {
             var user = await _userManager.FindByEmailAsync(User.Identity.Name);
-            return await ctx.CartItems.Where(ci => ci.UserId == user.Id).Select(ci => _mapper.Map<CartItemModel>(ci)).ToArrayAsync();
+            return await ctx.CartItems
+                .Include(i => i.User)
+                .Include(i => i.Instrument)
+                .Where(ci => ci.UserId == user.Id)
+                .Select(ci => _mapper.Map<CartItemModel>(ci))
+                .ToArrayAsync();
         }
         [Route("purchase")]
         public async Task<Result> MakePurchase(PurchaseModel model)
@@ -54,7 +59,13 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
         public async Task<OrderViewModel[]> GetOrders()
         {
             var user = await _userManager.FindByEmailAsync(User.Identity.Name);
-            return await ctx.Orders.Where(o => o.UserId == user.Id).Select(o => _mapper.Map<OrderViewModel>(o)).ToArrayAsync();
+            return await ctx.Orders
+                .Include(i => i.Items)
+                .ThenInclude(i => i.Instrument)
+                .Include(i => i.Location)
+                .Where(o => o.UserId == user.Id)
+                .Select(o => _mapper.Map<OrderViewModel>(o))
+                .ToArrayAsync();
         }
 
         [Route("addtocart")]
