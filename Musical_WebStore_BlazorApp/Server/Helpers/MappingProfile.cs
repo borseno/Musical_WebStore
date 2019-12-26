@@ -2,6 +2,7 @@ using System;
 using AutoMapper;
 using Musical_WebStore_BlazorApp.Server.Data.Models;
 using Musical_WebStore_BlazorApp.Shared;
+using Musical_WebStore_BlazorApp.Shared.DTOs;
 
 public class MappingProfile : Profile {
     public MappingProfile() 
@@ -14,5 +15,7 @@ public class MappingProfile : Profile {
         CreateMap<ItemOrder, ItemOrderModel>();
         CreateMap<CartItem, CartItemModel>();
         
+        CreateMap<Star, StarDTO>();
+        CreateMap<Testing, TestingDTO>();
     }
 }

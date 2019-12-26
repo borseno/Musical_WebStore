@@ -1,3 +1,4 @@
+using Blazored.Localisation;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Builder;
@@ -17,10 +18,13 @@ namespace Musical_WebStore_BlazorApp.Client
             services.AddScoped<UserService, UserService>();
             services.AddScoped<CommentService, CommentService>();
             services.AddScoped<StarService, StarService>();
+            services.AddScoped<ITestEnrollService, TestEnrollService>();
+            services.AddScoped<ITestingInfoService, TestingInfoService>();
         }
 
         public void Configure(IComponentsApplicationBuilder app)
         {
+            app.UseBlazoredLocalisation();
             app.AddComponent<App>("app");
         }
     }

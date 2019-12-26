@@ -1,0 +1,56 @@
+﻿@page "/TestingInfo/{id}"
+@inject ITestingInfoService service
+
+<h3 class="inst-title">Testing info</h3>
+
+<div class="card">
+    <div class="card-header">
+        <h1>Testing #@testing?.Id</h1>
+    </div>
+
+    <div class="card-body">
+        <label class="card-subtitle">Instrument</label>
+        <p class="text-info">@testing?.Instrument?.Title</p>
+
+        <label class="card-subtitle">Comment</label>
+        <p class="text-info">@testing?.Comment</p>
+
+        <label class="card-subtitle">Date</label>
+        <p class="text-info">@testing?.DateTime.ToString("MM:dd:yyyy")</p>
+
+        <label class="card-subtitle">Status</label>
+        <p class="text-info">@(testing?.IsConfirmed ?? false ? "Confirmed" : "Not confirmed")</p>
+        <AuthorizeView>
+            <Authorized>
+                @if (context?.User?.IsInRole("Admin") ?? false)
+                {
+                    <button class="btn btn-outline-dark" @onclick="@ChangeTestingStatus">@(testing?.IsConfirmed ?? false ? "Cancel" : "Confirm")</button>
+                }
+            </Authorized>
+        </AuthorizeView>
+    </div>
+
+    <div class="card-body text-center">
+        <img class="card-img-top" src="@testing?.User?.Email" alt="Card image cap" style="width: 100%">
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    private TestingDTO testing = new TestingDTO();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        testing = await service.GetTestingInfo(Int32.Parse(Id));
+
+        await base.OnParametersSetAsync();
+    }
+
+    private Task ChangeTestingStatus()
+    {
+        testing.IsConfirmed ^= true;
+        return service.ChangeState(testing.Id);
+    }
+}

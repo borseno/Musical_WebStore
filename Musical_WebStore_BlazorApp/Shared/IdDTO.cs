@@ -4,7 +4,8 @@ using System.Text;
 
 namespace Musical_WebStore_BlazorApp.Shared
 {
-    public class Guitar : Instrument
+    public class IdDTO
     {
+        public int Id { get; set; }
     }
 }

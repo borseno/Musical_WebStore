@@ -1,44 +1,45 @@
-@page "/instrument"
 @page "/instrument/{Index}"
-@using Musical_WebStore_BlazorApp.Shared
+@using Musical_WebStore_BlazorApp.Shared.DTOs
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
+@using System.Security.Claims
 @inject CommentService commentService
 @inject StarService starService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject HttpClient Http
 
 
-@if (instruments == null)
+@if (instrument == null)
 {
-    <p><em>Loading instruments...</em></p>
+    <p><em>Loading instrument...</em></p>
 }
 else
 {
-<div class="row m-3">
-    <div class="col-md-4">
-        <div class="card">
+    <div class="row m-3">
+        <div class="col-md-4">
+            <div class="card">
 
-            <div class="card-header">
-                <h1>@instrument.Title</h1>
-            </div>
+                <div class="card-header">
+                    <h1>@instrument.Title</h1>
+                </div>
 
-            <div class="card-body text-center">
-                <img class="card-img-top" src="@instrument.Image" alt="Card image cap" style="width: 100%">
+                <div class="card-body text-center">
+                    <img class="card-img-top" src="@instrument.Image" alt="Card image cap" style="width: 100%">
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="alert alert-info" role="alert">
-            <h1>Price: $@instrument.Price</h1>
-        </div>
-        <div class="alert alert-warning" role="alert">
-            <h3>Quantity: @instrument.Quantity</h3>
-        </div>
-        <div class="alert alert-primary" role="alert">
-            <h4>Type: @instrument.TypeName</h4>
-        </div>
-        <div class="alert alert-secondary" role="alert">
-            <h4>@instrument.Description</h4>
+        <div class="col-md-4">
+            <div class="alert alert-info" role="alert">
+                <h1>Price: $@instrument.Price</h1>
+            </div>
+            <div class="alert alert-warning" role="alert">
+                <h3>Quantity: @instrument.Quantity</h3>
+            </div>
+            <div class="alert alert-primary" role="alert">
+                <h4>Type: @instrument.TypeName</h4>
+            </div>
+            <div class="alert alert-secondary" role="alert">
+                <h4>@instrument.Description</h4>
+            </div>
         </div>
         <EditForm Model="@model" OnValidSubmit="AddToCart">
             <DataAnnotationsValidator />
@@ -54,97 +55,110 @@ else
             <button class="btn btn-primary" type="submit">Add to cart</button>
         </EditForm>
     </div>
-</div>
-    
 
 
-@code{ 
-    int[] list = new int[]{ 0, 1, 2, 3, 4 };
-}
-    <div>
-    @foreach(var l in list)
-    {
-        <label id="@l" @onclick="@(() => LeaveStar(l + 1))">@starsSymbols[l]</label>
+
+    @code{
+        int[] list = new int[] { 0, 1, 2, 3, 4 };
     }
+    <div>
+        @foreach (var l in list)
+        {
+            <label id="@l" @onclick="@(() => LeaveStar(l + 1))">@starsSymbols[l]</label>
+        }
     </div>
 
-    @if(user.Identity.Name == null)
+    @if (user.Identity.Name == null)
     {
         <p>Login to leave the comment.</p>
     }
     else
     {
-    <div>
-    <EditForm Model="@commentModel" OnValidSubmit="@LeaveComment">
-        <div class="form-group">
-            <label for="email">Leave your comment here</label>
-            <InputText id="email" class="form-control" @bind-Value="commentModel.Text" />
-            <ValidationMessage For="@(() => commentModel.Text)" />
-        </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </EditForm>
-    </div>
-    }
-    <div>
-    <div class="container">
-	
-    @foreach(var com in comments)
-    {
-        <div class="row">
-		 <div class="media comment-box">
-            <div class="media-left">
-                <a href="#">
-                    <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
-                </a>
-            </div>
-            <div class="media-body">
-                <h4 class="media-heading">@com.User.Email</h4>
-               <AuthorizeView>
-                    <Authorized>
-                        @if (context.User.IsInRole("Admin") || com.User.Email == user.Identity.Name)
-                        {
-                            <button @onclick="@(() => DeleteComment(com.Id))">Delete</button>
-                        }
-                    </Authorized>
-               </AuthorizeView>
-                <p>@com.Text</p>
-            </div>
-        </div>
+        <div>
+            <EditForm Model="@commentModel" OnValidSubmit="@LeaveComment">
+                <div class="form-group">
+                    <label for="email">Leave your comment here</label>
+                    <InputText id="email" class="form-control" @bind-Value="commentModel.Text" />
+                    <ValidationMessage For="@(() => commentModel.Text)" />
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </EditForm>
         </div>
     }
-	
-</div>
+    <div>
+        <div class="container">
+
+            @foreach (var com in comments)
+            {
+                <div class="row">
+                    <div class="media comment-box">
+                        <div class="media-left">
+                            <a href="#">
+                                <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
+                            </a>
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading">@com.User.Email</h4>
+                            <AuthorizeView>
+                                <Authorized>
+                                    @if (context.User.IsInRole("Admin") || com.User.Email == user.Identity.Name)
+                                    {
+                                        <button @onclick="@(() => DeleteComment(com.Id))">Delete</button>
+                                    }
+                                </Authorized>
+                            </AuthorizeView>
+                            <p>@com.Text</p>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
     </div>
 }
 @code {
-    List<Instrument> instruments;
     Instrument instrument;
     List<CommentLimited> comments;
-    List<Star> stars;
+    List<StarDTO> stars;
+    ClaimsPrincipal user;
     int mark;
-    System.Security.Claims.ClaimsPrincipal user;
+    LeaveCommentModel commentModel = new LeaveCommentModel();
+    string[] starsSymbols = new string[5];
+    AddItemToCartModel model = new AddItemToCartModel();
+
     [Parameter]
     public string Index { get; set; }
-    CommentModel commentModel = new CommentModel();
-    AddItemToCartModel model = new AddItemToCartModel();
-    string[] starsSymbols = new string[5];
+    
+
     protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        
+        await RefreshState();
+    }
+
+    private async Task RefreshState()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         user = authState.User;
-        comments = await Http.GetJsonAsync<List<CommentLimited>>("api/Comments");
-        comments = comments.Where(c => c.InstrumentId == int.Parse(Index)).ToList();
-        instruments = await Http.GetJsonAsync<List<Instrument>>("api/Instruments");
-        instrument = instruments.Single(i => i.Id == int.Parse(Index));
-        stars = await Http.GetJsonAsync<List<Star>>("api/Stars");
-        if(stars.Count() != 0)
+
+        var allComments = await Http.GetJsonAsync<List<CommentLimited>>("api/Comments");
+        comments = allComments.Where(c => c.Instrument.Id == int.Parse(Index)).ToList();
+
+        var allInstruments = await Http.GetJsonAsync<List<Instrument>>("api/Instruments");
+        instrument = allInstruments.Single(i => i.Id == int.Parse(Index));
+
+        stars = await Http.GetJsonAsync<List<StarDTO>>("api/Stars");
+
+        if (stars.Count() != 0)
         {
-            int sum = stars.Where(s => s.InstrumentId == int.Parse(Index)).Sum(star => star.Mark);
-            int count = stars.Where(str => str.InstrumentId == int.Parse(Index)).Count();
-            if(count != 0)
+            int sum = stars.Where(s => s.Instrument.Id == int.Parse(Index)).Sum(star => star.Mark);
+            int count = stars.Where(s => s.Instrument.Id == int.Parse(Index)).Count();
+
+            if (count != 0)
             {
-                mark = sum/count;
-            }   
+                mark = sum / count;
+            }
             else
             {
                 mark = 0;
@@ -155,10 +169,9 @@ else
             mark = 0;
         }
 
-        
-        for(int x = 0; x < 5; x++)
+        for (int x = 0; x < 5; x++)
         {
-            if(x < mark)
+            if (x < mark)
             {
                 starsSymbols[x] = "★";
             }
@@ -166,33 +179,31 @@ else
             {
                 starsSymbols[x] = "☆";
             }
-            
         }
-        
     }
 
     private async Task LeaveComment()
     {
-        commentModel.AuthorId = user.Identity.Name;
         commentModel.InstrumentId = int.Parse(Index);
         var result = await commentService.LeaveComment(commentModel);
-        await OnInitializedAsync();
+        Console.WriteLine(result.Successful + ":" + result.Errors);
+        await RefreshState();
     }
 
     private async Task DeleteComment(int id)
     {
-        var deleteCommentModel = new DeleteCommentModel() {CommentId = id};
+        var deleteCommentModel = new DeleteCommentModel() { CommentId = id };
         var result = await commentService.DeleteComment(deleteCommentModel);
-        await OnInitializedAsync();
+        await RefreshState();
     }
-    
+
     private async Task LeaveStar(int mark)
     {
         StarModel starModel = new StarModel() { Mark = mark };
         starModel.AuthorId = user.Identity.Name;
         starModel.InstrumentId = int.Parse(Index);
         var result = await starService.LeaveStar(starModel);
-        await OnInitializedAsync();
+        await RefreshState();
     }
 
     private async Task AddToCart()

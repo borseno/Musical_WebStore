@@ -37,6 +37,8 @@ else
                         
                         <AuthorizeView>
                             <Authorized>
+                                <a href="testinstrument/@instrument.Id" class="btn btn-primary m-1">Enroll for testing</a>
+
                                 @if (context.User.IsInRole("Admin"))
                                 {
                                     <button class="btn btn-primary m-1" @onclick="@(() => DeleteGood(@instrument.Id))">Delete</button>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Musical_WebStore_BlazorApp.Shared.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Musical_WebStore_BlazorApp.Server.Data.Models;
 using Musical_WebStore_BlazorApp.Shared;
@@ -22,24 +23,30 @@ namespace Musical_WebStore_BlazorApp.Server.Data
         public DbSet<Order> Orders {get;set;}
         public DbSet<ItemOrder> ItemOrders {get;set;}
         public DbSet<Location> Locations {get;set;}
+         public DbSet<Testing> Testings { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder blder)
         {
-            builder.Entity<CartItem>().HasKey(item => new {item.InstrumentId, item.UserId});
-            builder.Entity<CartItem>().HasOne(ci => ci.User).WithMany(u => u.CartItems).HasForeignKey(ci => ci.UserId);
-
-            builder.Entity<ItemOrder>().HasKey(io => new {io.InstrumentId, io.OrderId});
-            builder.Entity<ItemOrder>().HasOne(io => io.Order).WithMany(o => o.Items).HasForeignKey(io => io.OrderId);
-            builder.Entity<Guitar>()
+            blder.Entity<CartItem>().HasKey(item => new {item.InstrumentId, item.UserId});
+            blder.Entity<CartItem>().HasOne(ci => ci.User).WithMany(u => u.CartItems).HasForeignKey(ci => ci.UserId);
+            blder.Entity<Star>()
+                .HasKey(i => new { i.InstrumentId, i.AuthorId })
+                ; 
+            blder.Entity<Testing>()
+                .Property(i => i.UserId)
+                .IsRequired(true);
+            blder.Entity<ItemOrder>().HasKey(io => new {io.InstrumentId, io.OrderId});
+            blder.Entity<ItemOrder>().HasOne(io => io.Order).WithMany(o => o.Items).HasForeignKey(io => io.OrderId);
+            blder.Entity<Musical_WebStore_BlazorApp.Shared.DTOs.Guitar>()
                 .HasBaseType<Instrument>();
 
-            builder.Entity<Pedal>()
+            blder.Entity<Pedal>()
                 .HasBaseType<Instrument>();
 
-            builder.Entity<Amplifier>()
+            blder.Entity<Amplifier>()
                 .HasBaseType<Instrument>();
 
-            builder.Entity<Instrument>()
+            blder.Entity<Instrument>()
                 .HasDiscriminator<string>("TypeName")
             .HasValue<Instrument>(nameof(Instrument))
             .HasValue<Amplifier>(nameof(Amplifier))
@@ -47,9 +54,9 @@ namespace Musical_WebStore_BlazorApp.Server.Data
             .HasValue<Pedal>(nameof(Pedal))
             ;
 
-            builder.Seed();
+            blder.Seed();
 
-            base.OnModelCreating(builder);
+            base.OnModelCreating(blder);
         }
     }
 

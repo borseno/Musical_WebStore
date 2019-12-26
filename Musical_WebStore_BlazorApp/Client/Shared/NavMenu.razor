@@ -17,20 +17,37 @@
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="list">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Instruments
+                <span class="oi oi-list-rich" aria-hidden="true"></span>Instruments
             </NavLink>
             <ul class="sub-menu">
                 <NavLink class="nav-link" href="list/Guitar">
-                    <span class="oi oi-list-rich" aria-hidden="true" ></span> Guitars
+                    <span class="oi oi-list-rich" aria-hidden="true"></span>Guitars
                 </NavLink>
                 <NavLink class="nav-link" href="list/Amplifier">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Amplifiers
+                    <span class="oi oi-list-rich" aria-hidden="true"></span>Amplifiers
                 </NavLink>
                 <NavLink class="nav-link" href="list/Pedal">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Pedals
+                    <span class="oi oi-list-rich" aria-hidden="true"></span>Pedals
                 </NavLink>
             </ul>
         </li>
+        <AuthorizeView>
+            <Authorized>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="testings/mine">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span>My Testings
+                    </NavLink>
+                </li>
+                @if (context.User.IsInRole("Admin"))
+                {
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="testings/all">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span>All testings
+                        </NavLink>
+                    </li>
+                }
+            </Authorized>
+        </AuthorizeView>
     </ul>
 </div>
 

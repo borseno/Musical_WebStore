@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Musical_WebStore_BlazorApp.Server.Data;
 
 namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
 {
     [DbContext(typeof(MusicalShopIdentityDbContext))]
-    partial class MusicalShopIdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191202170131_FixedRelationships")]
+    partial class FixedRelationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -200,38 +202,6 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                     b.ToTable("Stars");
                 });
 
-            modelBuilder.Entity("Musical_WebStore_BlazorApp.Server.Data.Models.Testing", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("InstrumentId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InstrumentId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Testings");
-                });
-
             modelBuilder.Entity("Musical_WebStore_BlazorApp.Server.Data.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -342,8 +312,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -11,
                             Description = "One of the most legendary amps for the fans of heavier tone.",
                             Image = "images/Amplifiers/1.jpg",
-                            Price = 400,
-                            Quantity = 4,
+                            Price = 600,
+                            Quantity = 7,
                             Title = "Peavey 6505",
                             TypeName = "Amplifier"
                         },
@@ -353,7 +323,7 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Description = "A high-end hand-wired tube amp with great style.",
                             Image = "images/Amplifiers/2.jpg",
                             Price = 700,
-                            Quantity = 10,
+                            Quantity = 1,
                             Title = "Vox AC4HW1",
                             TypeName = "Amplifier"
                         },
@@ -362,8 +332,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -13,
                             Description = "A legendary tone monster designed by Eddie Van Halen.",
                             Image = "images/Amplifiers/3.jpg",
-                            Price = 200,
-                            Quantity = 3,
+                            Price = 100,
+                            Quantity = 2,
                             Title = "EVH 5150III 50W",
                             TypeName = "Amplifier"
                         },
@@ -373,7 +343,7 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Description = "A modern reimagining of the iconic AC15.",
                             Image = "images/Amplifiers/4.jpg",
                             Price = 300,
-                            Quantity = 3,
+                            Quantity = 2,
                             Title = "Vox Custom AC15C2",
                             TypeName = "Amplifier"
                         },
@@ -382,8 +352,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -15,
                             Description = "Superb flexibility and power from this all-tube combo.",
                             Image = "images/Amplifiers/5.jpg",
-                            Price = 300,
-                            Quantity = 2,
+                            Price = 100,
+                            Quantity = 8,
                             Title = "Blackstar HT Stage 60 MKII",
                             TypeName = "Amplifier"
                         },
@@ -392,8 +362,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -16,
                             Description = "A stand-out combo that crushes stage performances.",
                             Image = "images/Amplifiers/6.jpg",
-                            Price = 800,
-                            Quantity = 3,
+                            Price = 200,
+                            Quantity = 10,
                             Title = "Orange Crush Pro CR60C",
                             TypeName = "Amplifier"
                         },
@@ -402,8 +372,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -17,
                             Description = "Flexible combo providing legendary Boss tone at an attractive price.",
                             Image = "images/Amplifiers/7.jpg",
-                            Price = 500,
-                            Quantity = 10,
+                            Price = 700,
+                            Quantity = 6,
                             Title = "Boss Katana KTN-100",
                             TypeName = "Amplifier"
                         },
@@ -412,8 +382,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -18,
                             Description = "A classic Fender combo amp with great power.",
                             Image = "images/Amplifiers/8.jpg",
-                            Price = 100,
-                            Quantity = 6,
+                            Price = 900,
+                            Quantity = 3,
                             Title = "Fender Champion 100",
                             TypeName = "Amplifier"
                         },
@@ -422,8 +392,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -19,
                             Description = "Huge tone and power from this high-end acoustic amp.",
                             Image = "images/Amplifiers/9.jpg",
-                            Price = 600,
-                            Quantity = 3,
+                            Price = 400,
+                            Quantity = 9,
                             Title = "AER Compact 60",
                             TypeName = "Amplifier"
                         },
@@ -433,7 +403,7 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Description = "A solid dual-channel choice for street performers.",
                             Image = "images/Amplifiers/10.jpg",
                             Price = 200,
-                            Quantity = 8,
+                            Quantity = 1,
                             Title = "Roland Cube Street",
                             TypeName = "Amplifier"
                         });
@@ -451,8 +421,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -21,
                             Description = "Vintage tone and style to spare with this high-end Takamine.",
                             Image = "images/Guitars/1.jpg",
-                            Price = 900,
-                            Quantity = 7,
+                            Price = 600,
+                            Quantity = 4,
                             Title = "Yamaha S1209",
                             TypeName = "Guitar"
                         },
@@ -461,8 +431,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -22,
                             Description = "A gorgeous premium all-solid-wood Taylor.",
                             Image = "images/Guitars/2.jpg",
-                            Price = 800,
-                            Quantity = 3,
+                            Price = 500,
+                            Quantity = 10,
                             Title = "Fender CD60",
                             TypeName = "Guitar"
                         },
@@ -471,8 +441,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -23,
                             Description = "Great looking dreadnaught body guitar from Bristol.",
                             Image = "images/Guitars/3.jpg",
-                            Price = 500,
-                            Quantity = 10,
+                            Price = 300,
+                            Quantity = 4,
                             Title = "Takamine EF360S-TT",
                             TypeName = "Guitar"
                         },
@@ -481,8 +451,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -24,
                             Description = "Classic style with this solid-wood Martin.",
                             Image = "images/Guitars/4.jpg",
-                            Price = 100,
-                            Quantity = 1,
+                            Price = 900,
+                            Quantity = 4,
                             Title = "Taylor 314ce",
                             TypeName = "Guitar"
                         },
@@ -491,7 +461,7 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -25,
                             Description = "A mid-range performance-focused acoustic with a high-end feel.",
                             Image = "images/Guitars/5.jpg",
-                            Price = 700,
+                            Price = 400,
                             Quantity = 1,
                             Title = "Blueridge BR-160",
                             TypeName = "Guitar"
@@ -501,8 +471,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -26,
                             Description = "Beautiful style, quality and playability with this Seagull.",
                             Image = "images/Guitars/6.jpg",
-                            Price = 200,
-                            Quantity = 1,
+                            Price = 500,
+                            Quantity = 2,
                             Title = "Martin 16 Series D-16GT",
                             TypeName = "Guitar"
                         },
@@ -512,7 +482,7 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Description = "A taste of vintage America with this stylish Chinese guitar.",
                             Image = "images/Guitars/7.jpg",
                             Price = 200,
-                            Quantity = 6,
+                            Quantity = 10,
                             Title = "Yamaha A Series A3M",
                             TypeName = "Guitar"
                         },
@@ -521,8 +491,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -28,
                             Description = "Affordable slimline Yamaha with upgraded performance.",
                             Image = "images/Guitars/8.jpg",
-                            Price = 700,
-                            Quantity = 8,
+                            Price = 500,
+                            Quantity = 5,
                             Title = "Seagull S6 Original",
                             TypeName = "Guitar"
                         },
@@ -531,8 +501,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -29,
                             Description = "A proud representative from the Takamine family.",
                             Image = "images/Guitars/9.jpg",
-                            Price = 400,
-                            Quantity = 4,
+                            Price = 100,
+                            Quantity = 2,
                             Title = "The Loar LH-204 Brownstone",
                             TypeName = "Guitar"
                         },
@@ -542,7 +512,7 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Description = "FG800 shows what made Yamaha's FG series so legendary to begin with.",
                             Image = "images/Guitars/10.jpg",
                             Price = 1000,
-                            Quantity = 9,
+                            Quantity = 4,
                             Title = "Yamaha APX600",
                             TypeName = "Guitar"
                         });
@@ -560,8 +530,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -1,
                             Description = "Focused pedal that excels at distortion, overdrive and classic fuzz sounds.",
                             Image = "images/Pedals/1.jpg",
-                            Price = 100,
-                            Quantity = 7,
+                            Price = 200,
+                            Quantity = 10,
                             Title = "MXR Phase 90",
                             TypeName = "Pedal"
                         },
@@ -570,8 +540,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -2,
                             Description = "British tube distortion with outstanding dynamic range.",
                             Image = "images/Pedals/2.jpg",
-                            Price = 400,
-                            Quantity = 7,
+                            Price = 700,
+                            Quantity = 2,
                             Title = "Boss DD-7 Digital",
                             TypeName = "Pedal"
                         },
@@ -580,8 +550,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -3,
                             Description = "Fully analog distortion that brings an impressive range of tones and gain.",
                             Image = "images/Pedals/3.jpg",
-                            Price = 300,
-                            Quantity = 3,
+                            Price = 1000,
+                            Quantity = 2,
                             Title = "Ibanez TS808 Tube Screamer",
                             TypeName = "Pedal"
                         },
@@ -590,8 +560,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -4,
                             Description = "Unique features and great tones with an outstanding pedigree.",
                             Image = "images/Pedals/4.jpg",
-                            Price = 200,
-                            Quantity = 1,
+                            Price = 300,
+                            Quantity = 6,
                             Title = "Electro-Harmonix SOULFOOD",
                             TypeName = "Pedal"
                         },
@@ -600,8 +570,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -5,
                             Description = "More refined affordable dist box that brings great performance and limited versatility.",
                             Image = "images/Pedals/5.jpg",
-                            Price = 300,
-                            Quantity = 4,
+                            Price = 500,
+                            Quantity = 5,
                             Title = "Boss CH-1 Stereo",
                             TypeName = "Pedal"
                         },
@@ -610,8 +580,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -6,
                             Description = "A faithful reproduction of the classic Tube Screamer sound.",
                             Image = "images/Pedals/6.jpg",
-                            Price = 100,
-                            Quantity = 10,
+                            Price = 1000,
+                            Quantity = 4,
                             Title = "MXR Dyna Comp Effects Pedal",
                             TypeName = "Pedal"
                         },
@@ -620,8 +590,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -7,
                             Description = "Another classic stompbox that brings impressive performance and abundant flexibility.",
                             Image = "images/Pedals/7.jpg",
-                            Price = 100,
-                            Quantity = 7,
+                            Price = 600,
+                            Quantity = 3,
                             Title = "Dunlop The Original Crybaby",
                             TypeName = "Pedal"
                         },
@@ -630,8 +600,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -8,
                             Description = "Very light distortion that caters to Rock, but brings high quality tone.",
                             Image = "images/Pedals/8.jpg",
-                            Price = 900,
-                            Quantity = 9,
+                            Price = 500,
+                            Quantity = 8,
                             Title = "Boss RC-3 Loop Station Pedal",
                             TypeName = "Pedal"
                         },
@@ -641,7 +611,7 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Description = "Quintessential distortion pedal used both by legendary guitar players and the masses.",
                             Image = "images/Pedals/9.jpg",
                             Price = 900,
-                            Quantity = 1,
+                            Quantity = 9,
                             Title = "	Electro-Harmonix LPB-1",
                             TypeName = "Pedal"
                         },
@@ -650,8 +620,8 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                             Id = -10,
                             Description = "One of the best and only Klon Centaur clones on the market.",
                             Image = "images/Pedals/10.jpg",
-                            Price = 700,
-                            Quantity = 7,
+                            Price = 600,
+                            Quantity = 8,
                             Title = "Boss FV-500H",
                             TypeName = "Pedal"
                         });
@@ -732,21 +702,6 @@ namespace Musical_WebStore_BlazorApp.Server.Data.Migrations
                     b.HasOne("Musical_WebStore_BlazorApp.Shared.Instrument", "Instrument")
                         .WithMany()
                         .HasForeignKey("InstrumentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Musical_WebStore_BlazorApp.Server.Data.Models.Testing", b =>
-                {
-                    b.HasOne("Musical_WebStore_BlazorApp.Shared.Instrument", "Instrument")
-                        .WithMany()
-                        .HasForeignKey("InstrumentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Musical_WebStore_BlazorApp.Server.Data.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

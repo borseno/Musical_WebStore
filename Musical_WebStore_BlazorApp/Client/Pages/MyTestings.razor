@@ -1,0 +1,56 @@
+﻿@page "/Testings/{What}"
+@using Musical_WebStore_BlazorApp.Shared
+@inject ITestingInfoService service
+
+<h3 class="inst-title">Testings</h3>
+
+@if (testings == null)
+{
+    <p><em>Loading testings...</em></p>
+}
+else
+{
+    <div class="card-deck">
+        @foreach (var testing in testings)
+        {
+            <div class="col-6 col-sm-3 p-2" style="min-width: 18rem; max-width: 30.5%;">
+                <div class="card text-center">
+                    <a href='testinginfo/@testing.Id' class="btn btn-group">
+                        Info
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">Instrument: @testing.Instrument.Title</h5>
+                        <h5 class="card-text">Time: @testing.DateTime</h5>
+                        <p class="card-text">Comment: @testing.Comment</p>
+                        <p class="card-text">Status: @(testing.IsConfirmed ? "Confirmed" : "Not confirmed")</p>                        
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string What { get; set; }
+
+    IEnumerable<TestingDTO> testings = null;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (What.Equals("Mine", StringComparison.OrdinalIgnoreCase))
+        {
+            testings = await service.GetTestings(currentUserOnly: true);
+        }
+        else if (What.Equals("All", StringComparison.OrdinalIgnoreCase))
+        {
+            testings = await service.GetTestings(currentUserOnly: false);
+        }
+        else
+        {
+            throw new NotSupportedException($"Only 'all' or 'mine' testings info options are available. You option was: {{{What}}}");
+        }
+
+        await base.OnParametersSetAsync();
+    }
+}

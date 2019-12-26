@@ -5,10 +5,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Musical_WebStore_BlazorApp.Client;
+using Musical_WebStore_BlazorApp.Server.Controllers;
 using Musical_WebStore_BlazorApp.Server.Data;
 using Musical_WebStore_BlazorApp.Server.Data.Models;
 using Musical_WebStore_BlazorApp.Server.Helpers;
 using Musical_WebStore_BlazorApp.Server.Services;
+using Telegram.Bot;
 
 namespace Musical_WebStore_BlazorApp.Server
 {
@@ -40,6 +43,14 @@ namespace Musical_WebStore_BlazorApp.Server
             services.AddMvc().AddNewtonsoftJson();
             services.AddTransient<IEmailSender, MockeeMockersEmailSender>();
             services.AddTransient<IFileSavingService, FileSavingService>();
+            services.AddScoped<ITestEnrollingService, TestEnrollingService>();
+            services.AddScoped<IAdminNotificationService, TelegramBotNotificationService>(
+                u => new TelegramBotNotificationService(
+                    new TelegramBotClient("976707251:AAFwjyl8HMsMtpYUS9bVRug1Ywal5RiBwHg"),
+                    Configuration.GetAdminGroupId())
+            );
+            services.AddScoped<ITestingService, TestingService>();
+            services.AddScoped<ITestingInfoService, TestingInfoService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,

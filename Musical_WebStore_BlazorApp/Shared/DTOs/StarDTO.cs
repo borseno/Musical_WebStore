@@ -4,11 +4,10 @@ using System.Text;
 
 namespace Musical_WebStore_BlazorApp.Shared
 {
-    public class Star
+    public class StarDTO
     {
-        public int Id {get;set;}
-        public int InstrumentId {get;set;}
-        public string AuthorId {get;set;}
+        public Instrument Instrument { get; set; }
+        public UserLimited UserLimited { get; set; }
         public int Mark {get;set;}
     }
 }

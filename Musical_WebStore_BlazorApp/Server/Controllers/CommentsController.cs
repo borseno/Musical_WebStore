@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Musical_WebStore_BlazorApp.Server.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
+using System.Security.Claims;
+using AutoMapper.QueryableExtensions;
 
 namespace Musical_WebStore_BlazorApp.Server.Controllers
 {
@@ -27,16 +29,18 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
         }
 
         private Task<Comment[]> GetCommentsAsync() => ctx.Comments.ToArrayAsync();
-        
+
         private async Task<CommentLimited[]> GetCommentsLimitedAsync()
-        {   
-            var comments = await ctx.Comments.Select(c => _mapper.Map<CommentLimited>(c)).ToArrayAsync();
-            foreach(var com in comments)
-            {
-                com.User = _mapper.Map<UserLimited>(com.User);
-            }
+        {
+            var comments = await ctx.Comments
+                .AsNoTracking()
+                .Include(i => i.User)
+                .Include(i => i.Instrument)
+                .ProjectTo<CommentLimited>(_mapper.ConfigurationProvider)
+                .ToArrayAsync();
+            
             return comments;
-        } 
+        }
         [HttpGet]
         public async Task<IEnumerable<CommentLimited>> Get()
         {
@@ -46,32 +50,39 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
         }
         [HttpPost]
         [Route("addcomment")]
-        public async Task<IActionResult> LeaveCommentSample(CommentModel model)
-        {            
-            var user = await _userManager.FindByEmailAsync(model.AuthorId);
-            
+        public async Task<IActionResult> LeaveCommentSample(LeaveCommentModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+
+            if (user == null || !User.Identity.IsAuthenticated)
+            {
+                return Ok(new LeaveCommentResult() { Successful = false });
+            }
+
             ctx.Comments.Add(
                 new Comment()
                 {
                     InstrumentId = model.InstrumentId,
                     Text = model.Text,
-                    Date = DateTime.Now,
+                    Date = DateTime.UtcNow,
                     User = user
                 }
             );
+
             await ctx.SaveChangesAsync();
-            return Ok(new LeaveCommentResult(){Successful = true});
+
+            return Ok(new LeaveCommentResult() { Successful = true });
         }
 
         [Route("deletecomment")]
         public async Task<IActionResult> DeleteComment(DeleteCommentModel model)
-        {            
-            
+        {
+
             ctx.Comments.Remove(
                 ctx.Comments.Single(c => c.Id == model.CommentId)
             );
             await ctx.SaveChangesAsync();
-            return Ok(new DeleteCommentResult(){Successful = true});
+            return Ok(new DeleteCommentResult() { Successful = true });
         }
     }
 }
