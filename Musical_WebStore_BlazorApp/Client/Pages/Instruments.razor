@@ -20,6 +20,26 @@ else
             }
         </Authorized>
     </AuthorizeView>
+    <EditForm Model="@searchModel" OnValidSubmit="Search">
+        <div class="row">
+            <label>Search by name:</label>
+            <InputText class="form-control" @bind-Value="searchModel.Input" />
+        </div>
+        <div class="row">
+            <label>Price range:</label>
+            <div class="col col-1">
+                <InputText type="number" class="form-control" @bind-Value="searchModel.MinPrice" />
+            </div>
+            <label>-</label>
+            <div class="col col-1">
+                <InputText type="number" min="@searchModel.MinPrice" class="form-control" @bind-Value="searchModel.MaxPrice" />
+            </div>
+            <label>$</label>
+        </div>
+        <div class="row">
+            <button class="btn btn-primary">Apply filters</button>
+        </div>>
+    </EditForm>
 
     <div class="card-deck">
         @foreach (var instrument in instruments)
@@ -60,6 +80,8 @@ else
     [Parameter]
     public string Type { get; set; }
 
+    SearchInstrumentsModel searchModel = new SearchInstrumentsModel();
+
     private async Task DeleteGood(int id)
     {
         var obj = new DeleteGoodModel { Id = id };
@@ -71,6 +93,25 @@ else
         all_instruments.Remove(item);
         instruments.Remove(item);
 
+        this.StateHasChanged();
+    }
+    private void Search()
+    {
+        instruments = all_instruments;
+        if(searchModel.Input != "" && searchModel.Input != null)
+        {
+            instruments = instruments.Where(i => System.Text.RegularExpressions.Regex.IsMatch(i.Title, searchModel.Input, System.Text.RegularExpressions.RegexOptions.IgnoreCase)).ToList();
+        }
+
+        if(searchModel.MinPrice != "" && searchModel.MinPrice != null)
+        {
+            instruments = instruments.Where(i => i.Price >= int.Parse(searchModel.MinPrice)).ToList();
+        }
+
+        if(searchModel.MaxPrice != "" && searchModel.MaxPrice != null)
+        {
+            instruments = instruments.Where(i => i.Price <= int.Parse(searchModel.MaxPrice)).ToList();
+        }
         this.StateHasChanged();
     }
     protected override void OnParametersSet()
