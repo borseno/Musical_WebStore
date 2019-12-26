@@ -7,9 +7,12 @@ namespace Musical_WebStore_BlazorApp.Shared
 {
     public class PurchaseModel
     {
-        public string CardNumber {get;set;}
-        public string CVV {get;set;}
-        public string Year {get;set;}
-        public string Month {get;set;}
+        [Required(ErrorMessage = "You must choose a location")]
+        [StringLength(30, MinimumLength = 1, ErrorMessage = "Invalid")]
+        public string LocationId {get;set;}
+        [Required(ErrorMessage = "You must provide a phone number")]
+        [DataType(DataType.PhoneNumber)]
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Not a valid phone number")]
+        public string Phone {get;set;}
     }
 }
