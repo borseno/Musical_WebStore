@@ -11,65 +11,67 @@
 }
 else
 {
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <td>
-                    Date
-                </td>
-                <td>
-                    Status
-                </td>
-                <td>
-                    Items
-                </td>
-                <td>
-                    Delivering to
-                </td>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach(var order in orders)
-            {
+    <div class="container">
+        <table class="table table-hover">
+            <thead>
                 <tr>
                     <td>
-                        @order.Date
+                        Date
                     </td>
                     <td>
-                        @{
-                            switch(@order.StatusId)
-                            {
-                                case (int)OrderStatuses.InConfirmation:
-                                    <text>In confirmation</text>
-                                    break;
-                                case (int)OrderStatuses.Confirmed:
-                                    <text>Confirmed</text>
-                                    break;
-                                case (int)OrderStatuses.OnTheWay:
-                                    <text>On The Way</text>
-                                    break;
-                                case (int)OrderStatuses.Delivered:
-                                    <text>Waiting for you</text>
-                                    break;
-                            }
-                        }
+                        Status
                     </td>
                     <td>
-                        @foreach(var item in order.Items)
-                        {
-                            <div>
-                                <a href="instrument/@item.Instrument.Id">@item.Instrument.Title</a> (@item.Num шт)
-                            </div>
-                        }
+                        Items
                     </td>
                     <td>
-                        @order.Location.Name
-                        (@order.Location.Address)
+                        Delivering to
                     </td>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach(var order in orders)
+                {
+                    <tr>
+                        <td>
+                            @order.Date
+                        </td>
+                        <td>
+                            @{
+                                switch(@order.StatusId)
+                                {
+                                    case (int)OrderStatuses.InConfirmation:
+                                        <text>In confirmation</text>
+                                        break;
+                                    case (int)OrderStatuses.Confirmed:
+                                        <text>Confirmed</text>
+                                        break;
+                                    case (int)OrderStatuses.OnTheWay:
+                                        <text>On The Way</text>
+                                        break;
+                                    case (int)OrderStatuses.Delivered:
+                                        <text>Waiting for you</text>
+                                        break;
+                                }
+                            }
+                        </td>
+                        <td>
+                            @foreach(var item in order.Items)
+                            {
+                                <div>
+                                    <a href="instrument/@item.Instrument.Id">@item.Instrument.Title</a> (@item.Num шт)
+                                </div>
+                            }
+                        </td>
+                        <td>
+                            @order.Location.Name
+                            (@order.Location.Address)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
 
 @code {

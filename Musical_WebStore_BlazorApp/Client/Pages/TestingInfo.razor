@@ -3,36 +3,48 @@
 
 <h3 class="inst-title">Testing info</h3>
 
-<div class="card">
-    <div class="card-header">
-        <h1>Testing #@testing?.Id</h1>
+<div class="row m-3">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h1>Testing #@testing?.Id</h1>
+            </div>
+            <div class="card-body text-center">
+                <img class="card-img-top" src="@testing?.Instrument?.Image" alt="Card image cap" style="width: 100%">
+            </div>
+        </div>
     </div>
+    <div class="col-md-4">
+        <div class="alert alert-primary">
+            <h2 class="card-subtitle">Instrument</h2>
+            <h2 class="text-info">@testing?.Instrument?.Title</h2>
+        </div>
 
-    <div class="card-body">
-        <label class="card-subtitle">Instrument</label>
-        <p class="text-info">@testing?.Instrument?.Title</p>
+        <div class="alert alert-secondary">
+            <h2 class="card-subtitle">Comment</h2>
+            <h2 class="text-info">@testing?.Comment</h2>
+        </div>
 
-        <label class="card-subtitle">Comment</label>
-        <p class="text-info">@testing?.Comment</p>
+        <div class="alert alert-secondary">
+            <h2 class="card-subtitle">Date</h2>
+            <h2 class="text-info">@testing?.DateTime.ToString("MM:dd:yyyy")</h2>
+        </div>
 
-        <label class="card-subtitle">Date</label>
-        <p class="text-info">@testing?.DateTime.ToString("MM:dd:yyyy")</p>
-
-        <label class="card-subtitle">Status</label>
-        <p class="text-info">@(testing?.IsConfirmed ?? false ? "Confirmed" : "Not confirmed")</p>
-        <AuthorizeView>
-            <Authorized>
-                @if (context?.User?.IsInRole("Admin") ?? false)
-                {
-                    <button class="btn btn-outline-dark" @onclick="@ChangeTestingStatus">@(testing?.IsConfirmed ?? false ? "Cancel" : "Confirm")</button>
-                }
-            </Authorized>
-        </AuthorizeView>
+        <div class="alert alert-secondary">
+            <h2 class="card-subtitle">Status</h2>
+            <h2 class="text-info">@(testing?.IsConfirmed ?? false ? "Confirmed" : "Not confirmed")</h2>
+        </div>
+            <AuthorizeView>
+                <Authorized>
+                    @if (context?.User?.IsInRole("Admin") ?? false)
+                    {
+                        <button class="btn btn-outline-dark" @onclick="@ChangeTestingStatus">@(testing?.IsConfirmed ?? false ? "Cancel" : "Confirm")</button>
+                    }
+                </Authorized>
+            </AuthorizeView>
     </div>
-
-    <div class="card-body text-center">
-        <img class="card-img-top" src="@testing?.User?.Email" alt="Card image cap" style="width: 100%">
-    </div>
+        
+    
 </div>
 
 @code {
