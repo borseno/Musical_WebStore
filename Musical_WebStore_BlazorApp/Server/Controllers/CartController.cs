@@ -25,10 +25,10 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
             _userManager = userManager;
             _mapper = mapper;
         }
-        public async Task<Instrument[]> Get()
+        public async Task<CartItemModel[]> Get()
         {
             var user = await _userManager.FindByEmailAsync(User.Identity.Name);
-            return await ctx.CartItems.Where(ci => ci.UserId == user.Id).Select(ci => ci.Instrument).ToArrayAsync();
+            return await ctx.CartItems.Where(ci => ci.UserId == user.Id).Select(ci => _mapper.Map<CartItemModel>(ci)).ToArrayAsync();
         }
         [Route("purchase")]
         public async Task<Result> MakePurchase(PurchaseModel model)
@@ -38,17 +38,41 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
             // PROFIT!
             var user = await _userManager.FindByEmailAsync(User.Identity.Name);
             var torem = ctx.CartItems.Where(ci => ci.UserId == user.Id);
-            ctx.CartItems.RemoveRange(torem);
+            var order = new Order() { UserId = user.Id, StatusId = (int)OrderStatuses.InConfirmation, Date = DateTime.Now, LocationId = int.Parse(model.LocationId) };
+            ctx.Orders.Add(order);
+            await ctx.SaveChangesAsync();
+            foreach(var ci in torem)
+            {
+                ctx.ItemOrders.Add(new ItemOrder() {OrderId = order.Id, InstrumentId = ci.InstrumentId, Num = ci.Num });
+            }
+            ctx.CartItems.RemoveRange(torem); 
             await ctx.SaveChangesAsync();
             return new Result() { Successful = true };
         }
+
+        [Route("getorders")]
+        public async Task<OrderViewModel[]> GetOrders()
+        {
+            var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+            return await ctx.Orders.Where(o => o.UserId == user.Id).Select(o => _mapper.Map<OrderViewModel>(o)).ToArrayAsync();
+        }
+
         [Route("addtocart")]
         public async Task<Result> AddItemToCart(AddItemToCartModel model)
         {
             var user = await _userManager.FindByEmailAsync(User.Identity.Name);
             var cartItem = _mapper.Map<CartItem>(model);
             cartItem.UserId = user.Id;
-            ctx.CartItems.Add(cartItem);
+            var x = ctx.CartItems.Where(ci => ci.UserId == user.Id && ci.InstrumentId == model.InstrumentId);
+            if(x.Count() == 0)
+            {
+                cartItem.Num = int.Parse(model.Num);
+                ctx.CartItems.Add(cartItem);
+            }
+            else
+            {
+                x.First().Num += int.Parse(model.Num);
+            }
             await ctx.SaveChangesAsync();
             foreach(var t in ctx.CartItems)
                 Console.WriteLine($"{t.UserId} - {t.InstrumentId}");

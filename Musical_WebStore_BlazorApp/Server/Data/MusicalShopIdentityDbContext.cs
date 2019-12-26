@@ -19,10 +19,17 @@ namespace Musical_WebStore_BlazorApp.Server.Data
         public DbSet<Comment> Comments {get;set;}
         public DbSet<Star> Stars {get;set;}
         public DbSet<CartItem> CartItems {get;set;}
+        public DbSet<Order> Orders {get;set;}
+        public DbSet<ItemOrder> ItemOrders {get;set;}
+        public DbSet<Location> Locations {get;set;}
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<CartItem>().HasKey(item => new {item.InstrumentId, item.UserId});
             builder.Entity<CartItem>().HasOne(ci => ci.User).WithMany(u => u.CartItems).HasForeignKey(ci => ci.UserId);
+
+            builder.Entity<ItemOrder>().HasKey(io => new {io.InstrumentId, io.OrderId});
+            builder.Entity<ItemOrder>().HasOne(io => io.Order).WithMany(o => o.Items).HasForeignKey(io => io.OrderId);
             builder.Entity<Guitar>()
                 .HasBaseType<Instrument>();
 
@@ -186,6 +193,11 @@ namespace Musical_WebStore_BlazorApp.Server.Data
             var pedals = GetPedals(@base, @base * 0).ToArray();
             var amps = GetAmplifiers(@base, @base * 1).ToArray();
             var guitars = GetGuitars(@base, @base * 2).ToArray();
+            blder.Entity<Location>().HasData
+            (
+                new Location() {Id = -1, Address = "Харьков, ул. Целиноградская 36б", Name = "Rabbit Coffe Spot (ст. м. Алексеевская)", Phone = "+38(095)233-46-21"},
+                new Location() {Id = -2, Address = "Харьков, Бакулина 45а", Name = "Rabbit Coffe Spot (ст. м. Научная)", Phone = "+38(097)566-53-21"}
+            );
 
             blder.Entity<Pedal>()
                 .HasData(pedals);
