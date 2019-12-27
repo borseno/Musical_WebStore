@@ -54,6 +54,14 @@ else
                         <h5 class="card-text">Price: $@instrument.Price</h5>
                         <p class="card-text">@instrument.Description</p>
                         <p class="card-text">TYPE: @instrument.TypeName</p>
+                        @if(@instrument.AvgMark == 0)
+                        {
+                            <p class="card-text">No marks yet</p>
+                        }
+                        else
+                        {
+                            <p class="card-text">Avarage mark: @instrument.AvgMark</p>
+                        }
                         
                         <AuthorizeView>
                             <Authorized>
@@ -74,9 +82,9 @@ else
 }
 
 @code {
-    List<Instrument> all_instruments = null;
+    List<InstrumentDTO> all_instruments = null;
 
-    List<Instrument> instruments = null;
+    List<InstrumentDTO> instruments = null;
     [Parameter]
     public string Type { get; set; }
 
@@ -122,7 +130,7 @@ else
     
     protected override async Task OnInitializedAsync()
     {
-        instruments = await client.GetJsonAsync<List<Instrument>>("api/Instruments");
+        instruments = await client.GetJsonAsync<List<InstrumentDTO>>("api/Instruments");
         all_instruments = instruments;
     }
     private void RefreshFilter()

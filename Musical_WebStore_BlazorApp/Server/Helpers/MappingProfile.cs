@@ -17,5 +17,6 @@ public class MappingProfile : Profile {
         
         CreateMap<Star, StarDTO>();
         CreateMap<Testing, TestingDTO>();
+        CreateMap<Instrument, InstrumentDTO>();
     }
 }
