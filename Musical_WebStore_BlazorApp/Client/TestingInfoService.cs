@@ -19,7 +19,7 @@ namespace Musical_WebStore_BlazorApp.Client
             client.GetJsonAsync<TestingDTO>($"api/testing/{id}");
 
         public Task ChangeState(int id) =>
-            client.PostJsonAsync("api/testing/change", new { id });
+            client.PostJsonAsync("api/testing/changestate", new { id });
 
         public Task<IEnumerable<TestingDTO>> GetTestings(bool currentUserOnly) =>
             client.GetJsonAsync<IEnumerable<TestingDTO>>($"api/testing/testings/{currentUserOnly}");
