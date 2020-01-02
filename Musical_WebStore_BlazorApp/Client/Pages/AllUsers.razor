@@ -1,0 +1,48 @@
+﻿@page "/AllUsers"
+@using Musical_WebStore_BlazorApp.Shared
+@inject HttpClient client
+
+<h3 class="inst-title">Testings</h3>
+
+@if (users == null)
+{
+    <p><em>Loading users...</em></p>
+}
+else
+{
+    <div class="card-deck">
+        @foreach (var user in users)
+        {
+            <div class="col-6 col-sm-3 p-2" style="min-width: 18rem; max-width: 30.5%;">
+                <div class="card text-center">
+                    <div class="card-header">
+                        <button @onclick="async () => await BanAsync(user.Id)">Ban them!</button>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Username: @user.UserName</h5>
+                        <h5 class="card-text">Email: @user.Email</h5>
+                        <p class="card-text">Id: @user.Id</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    IEnumerable<UserLimited> users = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await client.GetJsonAsync<IEnumerable<UserLimited>>("api/management/users");
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task BanAsync(string id)
+    {
+        await client.PostJsonAsync("api/management/banuser", new { id });
+
+        Console.WriteLine(id + " is now banned!");
+    }
+}

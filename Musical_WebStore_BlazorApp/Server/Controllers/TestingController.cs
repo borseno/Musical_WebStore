@@ -53,7 +53,7 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
         [Route("[action]")]
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<IActionResult> ChangeState(IdDTO id)
+        public async Task<IActionResult> ChangeState(IdDTO<int> id)
         {
             await service.ChangeStateAsync(id.Id);
             

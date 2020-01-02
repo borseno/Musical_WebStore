@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Musical_WebStore_BlazorApp.Server.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using AutoMapper.QueryableExtensions;
 
 namespace Musical_WebStore_BlazorApp.Server.Controllers
 {
@@ -29,6 +31,22 @@ namespace Musical_WebStore_BlazorApp.Server.Controllers
         public async Task<LocationModel[]> GetLocations()
         {
             return await ctx.Locations.Select(l => _mapper.Map<LocationModel>(l)).ToArrayAsync();
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        [Route("[action]")]
+        public async Task<IEnumerable<UserLimited>> Users()
+        {
+            return await ctx.Users.ProjectTo<UserLimited>(_mapper.ConfigurationProvider).ToArrayAsync();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [Route("[action]")]
+        public async Task<IActionResult> BanUser(IdDTO<string> id)
+        {
+            return Ok();
         }
     }
 }

@@ -27,10 +27,19 @@ else
                     <td>
                         Delivering to
                     </td>
+                    <AuthorizeView>
+                        <Authorized>
+                            @if (context.User.IsInRole("Admin"))
+                            {
+                                <td>Userid</td>
+                                <td>Button</td>
+                            }
+                        </Authorized>
+                    </AuthorizeView>
                 </tr>
             </thead>
             <tbody>
-                @foreach(var order in orders)
+                @foreach (var order in orders)
                 {
                     <tr>
                         <td>
@@ -38,7 +47,7 @@ else
                         </td>
                         <td>
                             @{
-                                switch(@order.StatusId)
+                                switch (@order.StatusId)
                                 {
                                     case (int)OrderStatuses.InConfirmation:
                                         <text>In confirmation</text>
@@ -56,7 +65,7 @@ else
                             }
                         </td>
                         <td>
-                            @foreach(var item in order.Items)
+                            @foreach (var item in order.Items)
                             {
                                 <div>
                                     <a href="instrument/@item.Instrument.Id">@item.Instrument.Title</a> (@item.Num шт)
@@ -66,6 +75,15 @@ else
                         <td>
                             @order.Location.Name
                             (@order.Location.Address)
+                        </td>
+                        <td>
+                            @order.UserId
+                        </td>
+                        <td>
+                            @if (order.StatusId == (int)OrderStatuses.InConfirmation)
+                            {
+                                <button @onclick="async () => await Confirm(order.Id)">Confirm</button>
+                            }
                         </td>
                     </tr>
                 }
@@ -81,5 +99,15 @@ else
     {
         orders = await client.GetJsonAsync<OrderViewModel[]>("api/cart/getorders");
     }
-    
+
+    private Task Confirm(int id)
+    {
+        orders.First(i => i.Id == id).StatusId = (int)OrderStatuses.InConfirmation;
+
+        var action = client.PostJsonAsync("api/cart/confirm", new { id });
+
+        StateHasChanged();
+
+        return action;
+    }
 }
