@@ -1,0 +1,355 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Baloo+Tammudu');
+
+.uku {
+    font-family: 'Baloo Tammudu', cursive;
+    font-size: 22px;
+    line-height: 3.5;
+    color: #4c6d66;
+    width: 500px;
+    height: 690px;
+    margin: 50px auto;
+}
+
+.head {
+    height: 250px;
+    width: 150px;
+    margin: 0 auto;
+}
+
+.head-inside {
+    height: 250px;
+    width: 150px;
+    background-color: #a4dacf;
+    border-radius: 20px;
+    margin: 0 auto;
+    position: relative;
+}
+
+
+.head:after {
+    content: "";
+    position: absolute;
+    left: 250px;
+    right: 0;
+    margin: 0 auto;
+    height: 10px;
+    width: 180px;
+    background-color: #ababab;
+    top: 238px;
+    z-index: -1;
+}
+
+.extra {
+    content: "";
+    position: absolute;
+    left: 250px;
+    right: 0;
+    margin: 0 auto;
+    height: 10px;
+    width: 180px;
+    background-color: #ababab;
+    top: 319px;
+    z-index: -1;
+}
+
+.head:before {
+    content: "";
+    position: absolute;
+    left: 250px;
+    right: 0;
+    margin: 0 auto;
+    height: 10px;
+    width: 180px;
+    background-color: #ababab;
+    top: 158px;
+    z-index: -1;
+}
+
+.tuner {
+    position: absolute;
+    height: 40px;
+    width: 30px;
+    background-color: #ababab;
+    border-radius: 8px;
+}
+
+    .tuner.e {
+        left: -40px;
+        bottom: 30px;
+    }
+
+    .tuner.a {
+        left: -40px;
+        bottom: 110px;
+    }
+
+    .tuner.d {
+        left: -40px;
+        top: 20px;
+    }
+
+    .tuner.g {
+        right: -40px;
+        top: 20px;
+    }
+
+    .tuner.b {
+        right: -40px;
+        bottom: 110px;
+    }
+
+    .tuner.e2 {
+        right: -40px;
+        bottom: 30px;
+    }
+
+.arm {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+    width: 100px;
+    height: 400px;
+    background-color: #270d0dba;
+    margin: 20px auto;
+    position: relative;
+    background-image: repeating-linear-gradient( to bottom, rgba(46,44,40,1), rgba(46,44,40,1) 9.9%, rgba(126,103,67,1) 10%, rgba(46,44,40,1) 11% );
+}
+
+    .arm:after {
+        content: "";
+        position: absolute;
+        height: 20px;
+        width: 104px;
+        top: -20px;
+        background-color: #250000a1;
+    }
+
+.string {
+    height: 510px;
+    width: 1px;
+    background-color: #FFF;
+    position: relative;
+    box-shadow: 1px 1px 2px #000;
+    top: -20px;
+}
+
+    .string:after {
+        content: "";
+        position: absolute;
+        background-color: #FFF;
+        box-shadow: 1px 1px 2px #000;
+        z-index: 100;
+    }
+
+    .string:before {
+        content: "";
+        position: absolute;
+        height: 16px;
+        width: 16px;
+        border-radius: 50%;
+        background-color: #ababab;
+        box-shadow: 1px 1px 2px black;
+        z-index: 100;
+    }
+
+    .string.e:after {
+        height: 38px;
+        width: 1px;
+        left: 0;
+        top: -38px;
+        transform: rotate(-3deg);
+    }
+
+    .string.e:before {
+        left: -10px;
+        top: -54px;
+    }
+
+    .string.a:after {
+        height: 124px;
+        width: 1px;
+        left: -10px;
+        top: -122px;
+        transform: rotate(-9deg);
+    }
+
+    .string.a:before {
+        left: -29px;
+        top: -138px;
+    }
+
+    .string.d:after {
+        height: 207px;
+        width: 1px;
+        left: -18px;
+        top: -206px;
+        transform: rotate(-10deg);
+    }
+
+    .string.d:before {
+        left: -46px;
+        top: -220px;
+    }
+
+    .string.g:after {
+        height: 207px;
+        width: 1px;
+        right: -18px;
+        top: -206px;
+        transform: rotate(10deg);
+    }
+
+    .string.g:before {
+        right: -46px;
+        top: -220px;
+    }
+
+
+
+
+    .string.b:after {
+        height: 124px;
+        width: 1px;
+        right: -10px;
+        top: -122px;
+        transform: rotate(9deg);
+    }
+
+    .string.b:before {
+        right: -29px;
+        top: -138px;
+    }
+
+    .string.e2:after {
+        height: 38px;
+        width: 1px;
+        left: 0;
+        top: -38px;
+        transform: rotate(3deg);
+    }
+
+    .string.e2:before {
+        right: -10px;
+        top: -54px;
+    }
+
+
+.ukubody {
+    height: 180px;
+    width: 400px;
+    margin: -20px auto;
+    background-color: #a4dacf;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    position: relative;
+    z-index: -1;
+    top: -150px;
+}
+
+    .ukubody:after {
+        content: "";
+        position: absolute;
+        height: 180px;
+        width: 400px;
+        background-color: #a4dacf;
+        border-top-left-radius: 50%;
+        border-top-right-radius: 50%;
+        border-top: 1px solid #4c6d66;
+        z-index: 1;
+        top: 60px;
+    }
+
+.cloud {
+    width: 500px;
+    height: 80px;
+    border-radius: 10px;
+    margin: 0 auto;
+    position: relative;
+    top: -100px;
+    background-color: #FFF;
+    box-shadow: inset 0px -10px 38px 0px rgba(201,201,201,1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btnUku {
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    vertical-align: middle;
+    background-color: #a4dacf;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    border: solid 3px #4c6d66;
+}
+
+.btnUku.active:after {
+    position: absolute;
+    content: "";
+    filter: blur(3px);
+    width: 4px;
+    height: 460px;
+    background-color: white;
+}
+
+.btnUku.active {
+    background-color: #4c6d66;
+    color: #fff;
+    border-color: #a4dacf;
+}
+
+.btnUku.active.E:after {
+    bottom: 80px;
+    left: 206px;
+}
+
+.btnUku.active.A:after {
+    bottom: 80px;
+    left: 223px;
+}
+
+.btnUku.active.D:after {
+    bottom: 80px;
+    left: 239px;
+}
+
+.btnUku.active.G:after {
+    bottom: 80px;
+    left: 256px;
+}
+
+.btnUku.active.B:after {
+    bottom: 80px;
+    left: 272px;
+}
+
+.btnUku.active.E2:after {
+    bottom: 80px;
+    left: 290px;
+}
+
+@keyframes stringVibe {
+    0% {
+        background-color: #ffffff24;
+        width: 4px;
+    }
+
+    35% {
+        background-color: #ffffff91;
+        width: 3px;
+    }
+
+    70% {
+        background-color: #fffffb0;
+        width: 2px;
+    }
+
+    100% {
+        background-color: #fff;
+        width: 1px;
+    }
+}

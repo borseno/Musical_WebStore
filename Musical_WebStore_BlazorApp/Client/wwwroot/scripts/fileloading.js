@@ -1,4 +1,6 @@
-﻿(function () {
+﻿
+
+(function () {
     window.BlazorInputFile = {
         init: function init(elem, componentInstance) {
             var nextFileId = 0;
